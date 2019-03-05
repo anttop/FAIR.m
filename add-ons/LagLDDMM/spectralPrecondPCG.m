@@ -54,6 +54,7 @@ tspan   = H.tspan;
 nt      = H.nt;
 P       = H.d2D.P; % grid-to-grid operator
 dr      = H.d2D.dr;
+dr_adj  = H.d2D.dr_adj;
 d2psi   = H.d2D.d2psi;
 
 % construct preconditioner
@@ -64,7 +65,7 @@ else
 end
 
 % build matrix free Hessian
-Afctn = @(x) P(dr'*(d2psi*(dr*P(x)))) + H.d2S.d2S(x,H.omega,H.m) + shift*x;
+Afctn = @(x) P(dr_adj(d2psi*dr(P(x)))) + H.d2S.d2S(x,H.omega,H.m) + shift*x;
 
 % run PCG
 [dy,flag,relres,iter,resvec] = pcg(Afctn,rhs,tolCG,maxIterCG,Preconditioner);

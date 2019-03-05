@@ -82,6 +82,9 @@ nt    = round(numel(vc)/(dim*prod(m)))-1;
 matrixFree   = regularizer('get','matrixFree');
 doDerivative = (nargout>2);            % flag for necessity of derivatives
 
+% check if operator and adjoint are present
+operator = exist('K', 'var') && exist('Kadj', 'var');
+
 % compute transformation, distance, and regularization and combine these
 if nt<1
     [yc,dy] = getTrafoFromVelocityRK4(vc,xc,'omega',omegaV,'m',mV,...
@@ -95,7 +98,12 @@ Tc      = I*T(:);
 if doDerivative, dT      = dI(T(:)); end;
 
 % compute distance
-[Dc,~,dD,dres,d2psi] = distance(Tc,Rc,omega,m,'doDerivative',doDerivative);
+if(operator)
+    dist = str2func(distance());
+    [Dc,~,dD,dres,dres_adj,d2psi] = dist(Tc,Rc,omega,m,K,Kadj,'doDerivative',true);
+else
+    [Dc,~,dD,dres,d2psi] = distance(Tc,Rc,omega,m,'doDerivative',doDerivative);
+end
 
 % compute regularizer
 [Sc,dS,d2S] = regularizer(vc-vRef,omegaV,mV,'doDerivative',doDerivative);
@@ -103,7 +111,12 @@ if doDerivative, dT      = dI(T(:)); end;
 Jc = Dc + Sc;
 
 % collect variables for plots
-para = struct('Tc',Tc,'Rc',Rc,'omega',omega,'m',m,'yc',yc,'Jc',Jc,'Dc',Dc,'Sc',Sc);
+if(operator)
+    Dshow = @(x,y,omega,m) viewImage(abs(K(x(:))-y));
+    para = struct('Tc',Tc,'Rc',Rc,'omega',omega,'m',m,'yc',yc,'Jc',Jc,'Dc',Dc,'Sc',Sc,'Dshow',Dshow);
+else
+    para = struct('Tc',Tc,'Rc',Rc,'omega',omega,'m',m,'yc',yc,'Jc',Jc,'Dc',Dc,'Sc',Sc);
+end
 
 if ~doDerivative, return; end;
 
@@ -111,11 +124,20 @@ dD = dD*dT*dy;
 dJ = dD + dS;
 if nargout<4, return; end;
 
-dres = dres*dT*dy;
 % multiply outer and inner derivatives, note: dy might be sparse
 if not(matrixFree)
-    H  = dres'*d2psi*dres + d2S;
+    dres = dres*dT*dy;
+    H = dres'*d2psi*dres + d2S;
 else
+    % include operator if present
+    if(operator)
+        dres    = @(x) dres(dT*dy*x);
+        dres_adj= @(x) dy'*dT'*dres_adj(x);
+    else
+        dres_tmp = dres;
+        dres = @(x) dres*dT*dy*x;
+        dres_adj = @(x) dy'*dT'*dres_tmp'*x;
+    end
 
     % approximation to d2D in matrix free mode
     % d2D   = dr'*d2psi*dr
@@ -127,6 +149,7 @@ else
     H.d2D.how   = '*dr''*d2psi*dr';
     H.d2D.P     = @(x) x;
     H.d2D.dr    = dres;
+    H.d2D.dr_adj= dres_adj;
     H.d2D.d2psi = d2psi;
 
     H.d2S = d2S;

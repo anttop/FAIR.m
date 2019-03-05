@@ -132,6 +132,11 @@ switch grid
   otherwise, error('nyi');
 end;
 
+% set plotting when operator is given
+if(exist('operator', 'var') && operator)
+    NPIRpara.Plots = @FAIRplots_op;
+end
+
 % 7    convert optimization parameter sets for PIR and NPIR to lists
 PO = FAIRcell2struct(PIRpara);
 NO = FAIRcell2struct(NPIRpara);
@@ -163,7 +168,17 @@ for level=minLevel:maxLevel
   m     = ML{level}.m;
   xc    = getGrid(m);
   [T,R] = imgModel('coefficients',ML{level}.T,ML{level}.R,omega);
-  Rc    = imgModel(R,omega,center(xc,m));
+  
+  % use measurements if operator is provided
+  if(exist('operator', 'var') && operator)
+    % get data
+    Rc = ML{level}.R;
+    % set for plotting purpose
+    R = Rc;
+  else
+    Rc = imgModel(R,omega,center(xc,m));
+  end
+  
   if strcmp(func2str(NPIRobj),'MPLDDMMobjFctn')
       T = imgModel(T,omega,center(xc,m));
   end
@@ -226,10 +241,22 @@ for level=minLevel:maxLevel
 
   % ----- call NPIR -------------------------------------
   % initialize plots for NPIR
-  FAIRplots('reset','mode','NPIR','fig',level,'plots',plots);
-  FAIRplots('init',struct('Tc',T,'Rc',R,'omega',omega,'m',m));
-
-  NPIRfctn = @(vc) NPIRobj(T,Rc,omega,m,vRef,xc,omegaV,mV(m),N,vc);
+  if(exist('operator', 'var') && operator)
+    mR = size(R);
+    Rname = @(x) sprintf('R, %s, \\alpha=%s',dimstr(mR),num2str(regularizer('get','alpha')));
+    FAIRplots_op('reset','mode','NPIR','fig',level,'plots',plots,'Rname',Rname);
+    FAIRplots_op('init',struct('Tc',T,'Rc',R,'omega',omega,'m',m,'mR',mR));
+  else
+    FAIRplots('reset','mode','NPIR','fig',level,'plots',plots);
+    FAIRplots('init',struct('Tc',T,'Rc',R,'omega',omega,'m',m));
+  end
+  
+    
+  if(exist('operator', 'var') && operator)
+    NPIRfctn = @(vc) NPIRobj(T,Rc,omega,m,vRef,xc,omegaV,mV(m),N,vc,ML{level}.K,ML{level}.Kadj);
+  else
+    NPIRfctn = @(vc) NPIRobj(T,Rc,omega,m,vRef,xc,omegaV,mV(m),N,vc);
+  end
   if level == minLevel   % report status of objective function
     NPIRfctn([]);
   end; %

@@ -86,7 +86,7 @@ theta = [0, 30, 50, 60, 90];
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
-    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup] = createRadon2d(size(ML{k}.T), theta);
+    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta);
 end
 
 % Apply operator on finest level to generate synthetic measurements.

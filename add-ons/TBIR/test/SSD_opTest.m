@@ -18,14 +18,6 @@ function tests = SSD_opTest
     tests = functiontests(localfunctions);
 end
 
-function setupOnce(testCase)
-    cd('../');
-end
-
-function teardownOnce(testCase)
-    cd('test');
-end
-
 function oneDimTest(testCase)
 
 % Create template image.

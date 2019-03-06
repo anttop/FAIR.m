@@ -47,7 +47,7 @@
 % see also Ex_MPLDDMM.m
 %==============================================================================
 
-function [Jc,para,dJ,H] = MPLDDMMobjFctn(T,Rc,omega,m,vRef,xc,omegaV,mV,N,vc)
+function [Jc,para,dJ,H] = MPLDDMMobjFctn(T,Rc,omega,m,vRef,xc,omegaV,mV,N,vc,K,Kadj)
 
 para = struct([]);
 if nargin == 0

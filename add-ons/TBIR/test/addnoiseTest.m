@@ -18,14 +18,6 @@ function tests = addnoiseTest
     tests = functiontests(localfunctions);
 end
 
-function setupOnce(testCase)
-    cd('../');
-end
-
-function teardownOnce(testCase)
-    cd('test');
-end
-
 function resultTest(testCase)
 
 x = rand(30, 40, 50);

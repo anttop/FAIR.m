@@ -14,12 +14,13 @@
 %
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
-function [K, Kadj, cleanup] = createRadon2d(m, theta)
+function [K, Kadj, cleanup, ndet] = createRadon2d(m, theta)
 %RADON2D Creates function handles for 2D Radon transform using
 %ASTRA Toolbox.
 %
-%   [K, Kadj, cleanup] = RADON2D(m, theta) takes size of 2D geometry m, and
-%   angles of projections theta, and returns function handles.
+%   [K, Kadj, cleanup, ndet] = RADON2D(m, theta) takes size of 2D
+%   geometry m, and angles of projections theta, and returns function 
+%   handles and the number of detectors.
 %
 %   The setup uses parallel beam projections and the detector geometry is
 %   set up as [0, 1] and the number of detectors is
@@ -38,6 +39,7 @@ function [K, Kadj, cleanup] = createRadon2d(m, theta)
 %           [length(theta), ndet] to a vector of length prod(m).
 %   cleanup function handle that can be called to free resources occupied
 %           by ASTRA.
+%   ndet    The number of detectors.
 
 % Set up detector size and geometries.
 ndet = ceil(hypot(m(1), m(2)));

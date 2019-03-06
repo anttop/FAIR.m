@@ -18,14 +18,6 @@ function tests = createRadon2dTest
     tests = functiontests(localfunctions);
 end
 
-function setupOnce(testCase)
-    cd('../');
-end
-
-function teardownOnce(testCase)
-    cd('test');
-end
-
 function operatorTest(testCase)
 
 % Set up test image and projection angles.
@@ -34,7 +26,8 @@ m = size(x);
 theta = 0:10:179;
 
 % Create operators.
-[K, Kadj, cleanup] = createRadon2d(m, theta);
+[K, Kadj, cleanup, ndet] = createRadon2d(m, theta);
+verifyEqual(testCase, ndet, ceil(sqrt(2)*100));
 
 % Apply operator and check size.
 y = K(x(:));
@@ -58,7 +51,8 @@ theta = 0:10:179;
 y = rand(length(theta), ceil(sqrt(sum(m.^2))));
 
 % Create operators.
-[K, Kadj, cleanup] = createRadon2d(m, theta);
+[K, Kadj, cleanup, ndet] = createRadon2d(m, theta);
+verifyEqual(testCase, ndet, ceil(sqrt(sum(m.^2))));
 
 % Verify adjointness.
 Kx = K(x(:));

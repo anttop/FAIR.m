@@ -33,6 +33,9 @@ function ML = multilevelRadon2d(ML, maxLevel, minLevel)
 %   ML          cell array with measurements ML{k}.R generated for all
 %               levels between minLevel and maxLevel.
 %
+% Note that ML{k}.ndet must be set for each level k so that the data can be
+% appropriately downsampled.
+%
 % Note that ML{maxLevel}.R stays untouched and that ML{k}.R is padded in
 % dimension two if necessary.
 
@@ -41,15 +44,10 @@ for k=1:maxLevel - minLevel
     level = maxLevel-k;
     
     % Select data from higher level.
-    data = ML{level + 1}.R;    
+    data = ML{level + 1}.R;
     
-    % Pad if odd number of detector points.
-    [~, n] = size(data);
-    if(mod(n, 2) > 0)
-        data = padarray(data, [0, 1], 'replicate', 'post');
-    end
-    
-    % Downsample.
-    ML{level}.R = (data(:, 1:2:end) + data(:, 2:2:end)) / 4;
+    % Resize data according to number of detectors.
+    [m, ~] = size(data);
+    ML{level}.R = imresize(data, [m, ML{level}.ndet], 'bilinear', 'Antialiasing', false) / 2;
 end
 end

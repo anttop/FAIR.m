@@ -20,12 +20,13 @@ clear;
 close all;
 clc;
 
-% Load images.
-path = fullfile(FAIRpath, 'add-ons', 'TBIR', 'data');
-file1 = 'brain-T.png';
-file2 = 'brain-R.png';
-image1 = double(imread(fullfile(path, file1)));
-image2 = double(imread(fullfile(path, file2)));
+% Create images of same mass.
+image1 = 255 * double(createdisk([128, 128], [60, 60], 12));
+%image1 = imgaussfilt(image1, 0.5, 'FilterSize', 5);
+mass = sum(image1(:));
+image2 = double(createdisk([128, 128], [40, 40], 24));
+%image2 = imgaussfilt(image2, 0.5, 'FilterSize', 5);
+image2 = mass * image2 / sum(image2(:));
 
 % Save size of template.
 m = size(image1);
@@ -51,7 +52,7 @@ sigma = 0.05;
 
 % Set regularization parameters (in order: space, time, L2-norm squared).
 % The following parameters can be given as array
-alpha = [5e0, 5e0, 0];
+alpha = [1e-1, 1e-1, 0];
 
 % Set Hessian shift.
 hessianShift = 1e-2;
@@ -103,12 +104,17 @@ ML = multilevelRadon2d(ML, maxLevel, minLevel);
 
 % Run algorithm
 mV = @(m) ceil(1*m);
-[vc, ~, wc, his] = MLLDDMM(ML, 'operator', true, 'minLevel', minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV, 'N', N, 'parametric', false, 'NPIRpara', NPIRpara, 'plots', 1);
+[vc, ~, wc, his] = MLLDDMM(ML, 'operator', true, 'minLevel', minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV, 'N', N, 'parametric', false, 'NPIRpara', NPIRpara, 'NPIRobj', @MPLDDMMobjFctn, 'plots', 1);
 
 % Transform template and reshape.
-yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m), 'omega', omegaV, 'm', m, 'nt', nt, 'tspan', [1,0], 'N', N);
-Topt = linearInterMex(ML{maxLevel}.T, omega, center(yc, m));
-Topt = reshape(Topt, m);
+yInv = getTrafoFromInstationaryVelocityRK4(vc,getNodalGrid(omega,m),'omega',omegaV,'m',m,'nt',nt,'tspan',[1,0],'N',N);
+Jac = geometry(yInv, m, 'Jac', 'omega', omega);
+Topt = linearInterMex(ML{maxLevel}.T,omega,center(yInv,m));
+Topt = reshape(Topt .* Jac, m);
+
+% yc = getTrafoFromInstationaryVelocityRK4(vc,xc,'omega',omegaV,'m',m,'nt',nt,'tspan',[0,1],'N',N);
+% Int = getPICMatrixAnalyticIntegral(omega,m,m,yc,'doDerivative',false);
+% Topt = reshape(Int*image1(:), m);
 
 % Output stats.
 fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(Topt, image2));
@@ -125,10 +131,12 @@ colormap gray;
 subplot(2, 3, 1);
 imagesc(image1);
 axis image;
+caxis([0, 255]);
 title('Template');
 subplot(2, 3, 2);
 imagesc(image2);
 axis image;
+caxis([0, 255]);
 title('Unknown');
 subplot(2, 3, 3);
 imagesc(ML{maxLevel}.R);
@@ -138,6 +146,7 @@ ylabel('Directions');
 subplot(2, 3, 4);
 imagesc(Topt);
 axis image;
+caxis([0, 255]);
 title('Deformed template');
 subplot(2, 3, 5);
 imagesc(abs(Topt - image2));

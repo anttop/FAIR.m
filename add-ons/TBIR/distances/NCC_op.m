@@ -14,16 +14,16 @@
 %
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
-function [D, r, dD, dr, dradj, d2psi] = SSD_op(Tc, Rc, omega, m, K, Kadj, varargin)
-%SSD_OP Computes sum-of-squares objective including an operator.
+function [D, r, dD, dr, dradj, d2psi] = NCC_op(Tc, Rc, omega, m, K, Kadj, varargin)
+%NCC_OP Computes normalised cross-correlation including an operator.
 %
-%   [D, r, dD, dr, dr_adj, d2psi] = SSD_OP(Tc, Rc, omega, m, K, Kadj, varargin)
+%   [D, r, dD, dr, dr_adj, d2psi] = NCC_OP(Tc, Rc, omega, m, K, Kadj, varargin)
 %   takes a deformed image Tc, measurements Rc, the size of the measurement
 %   domain omega, the number of sampling points m of the measurement domain,
 %   and arguments varargin, and returns the value of the evaluated
-%   sum-of-squared distances data term and derivatives.
+%   NCC distance data term and derivatives.
 %
-%   D = SSD(K(), Rc) = hd * psi(r(Tc))
+%   D = NCC(K(), Rc) = hd * psi(r(Tc))
 %   
 %   with r(Tc) = K(Tc) - Rc and psi(r) = 0.5 * r' * W * r.
 %
@@ -41,9 +41,8 @@ function [D, r, dD, dr, dradj, d2psi] = SSD_op(Tc, Rc, omega, m, K, Kadj, vararg
 %               sample points of the measurement geometry.
 %   K           linear operator mapping from R^prod(n) to R^prod(m).
 %   Kadj        adjoint of linear operator K.
-%   varargin    optional name-value pairs such as 'doDerivative' (boolean)
-%               or a scalar weights or a (diagonal) weight matrix of
-%               size [prod(m), prod(m)].
+%   varargin    optional name-value pairs such as 'doDerivative' (boolean).
+%
 % Output:
 %   D           non-negative scalar (provided W is non-negative).
 %   r           array of size m.
@@ -55,27 +54,34 @@ function [D, r, dD, dr, dradj, d2psi] = SSD_op(Tc, Rc, omega, m, K, Kadj, vararg
 dD = [];
 dr = [];
 dradj = [];
+d2psi = [];
 doDerivative = false;
-weights = 1.0;
 
 % Parse parameters.
 for k=1:2:length(varargin)
   eval([varargin{k}, '=varargin{', int2str(k+1), '};']);
 end
 
-% Compute weights matrix.
-hd = prod((omega(2:2:end)-omega(1:2:end)) ./ m);
-d2psi = hd * weights;
+% Scaling factor.
+s = 1e6;
 
-% Compute residual.
-r = K(Tc) - Rc;
+% Compute first argument.
+r = K(Tc);
 
-% Compute SSD with operator.
-D = 0.5 * (r(:)' * d2psi * r(:));
+% Compute second argument.
+y = Rc / norm(Rc, 'fro');
+
+% Compute squared norm of r.
+snr = r(:)' * r(:);
+
+% Compute NCC with operator.
+ip = r(:)' * y(:);
+D = s * (1 - ip^2 / snr);
 
 if(doDerivative)
     dr = K;
     dradj = Kadj;
-    dD = Kadj(d2psi * r)';
+    dD = 2 * s * Kadj(-ip * y / snr + r * (ip / snr)^2)';
+    d2psi = 1;
 end
 end

@@ -104,7 +104,7 @@ ML = multilevelRadon3d(ML, maxLevel, minLevel);
 
 % Run algorithm
 mV = @(m) ceil(1*m);
-[vc, ~, wc, his] = MLLDDMM(ML, 'operator', true, 'minLevel', minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV, 'N', N, 'parametric', false, 'NPIRpara', NPIRpara, 'plots', 1);
+[vc, ~, wc, his] = MLLDDMM(ML, 'operator', true, 'minLevel', minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV, 'N', N, 'parametric', false, 'NPIRpara', NPIRpara, 'plots', false);
 
 % Transform template and reshape.
 yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m), 'omega', omegaV, 'm', m, 'nt', nt, 'tspan', [1,0], 'N', N);

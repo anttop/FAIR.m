@@ -46,9 +46,9 @@ function [K, Kadj, cleanup, ndet] = createRadon3d(m, theta, gpuIdx)
 % Note that ASTRA seems to require m(1) == m(2)!
 
 % Set up detector size and geometries.
-ndet = [m(3), ceil(sqrt(sum(m(1:2).^2)))];
+ndet = [ceil(sqrt(sum(m(1:2).^2))), m(3)];
 vol_geom = astra_create_vol_geom(m);
-proj_geom = astra_create_proj_geom('parallel3d', 1.0, 1.0, ndet(1), ndet(2), theta * pi / 180);
+proj_geom = astra_create_proj_geom('parallel3d', 1.0, 1.0, ndet(2), ndet(1), theta * pi / 180);
 
 % Create operator function handles.
 K = @(x) radon3d(reshape(x, m), proj_geom, vol_geom, gpuIdx);

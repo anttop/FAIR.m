@@ -21,11 +21,9 @@ close all;
 clc;
 
 % Load images.
-path = fullfile(FAIRpath, 'add-ons', 'TBIR', 'data');
-file1 = 'brain-T.png';
-file2 = 'brain-R.png';
-image1 = double(imread(fullfile(path, file1)));
-image2 = double(imread(fullfile(path, file2)));
+D = load('mice3D', 'dataT', 'dataR');
+source = double(D.dataT);
+target = double(D.dataR);
 
 % Save size of template.
 m = size(image1);

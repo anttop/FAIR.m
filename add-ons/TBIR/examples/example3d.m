@@ -73,7 +73,7 @@ imgModel('reset', 'imgModel', imageModel);
 regularizer('reset', 'regularizer', reg, 'nt', nt, 'alpha', alpha, 'HessianShift', hessianShift);
 trafo('reset', 'trafo', 'affine2D');
 distance('reset', 'distance', dist);
-viewImage('reset', 'viewImage', 'viewImage2D', 'colormap', gray(256));
+viewImage('reset', 'viewImage', 'imgmontage', 'direction', '-zyx', 'colormap', gray(256));
 NPIRpara = optPara('NPIR-GN');
 NPIRpara.maxIter = 30;
 NPIRpara.scheme = @GaussNewtonLDDMM;
@@ -104,7 +104,7 @@ ML = multilevelRadon3d(ML, maxLevel, minLevel);
 
 % Run algorithm
 mV = @(m) ceil(1*m);
-[vc, ~, wc, his] = MLLDDMM(ML, 'operator', true, 'minLevel', minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV, 'N', N, 'parametric', false, 'NPIRpara', NPIRpara, 'plots', false);
+[vc, ~, wc, his] = MLLDDMM(ML, 'operator', true, 'minLevel', minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV, 'N', N, 'parametric', false, 'NPIRpara', NPIRpara, 'plots', true);
 
 % Transform template and reshape.
 yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m), 'omega', omegaV, 'm', m, 'nt', nt, 'tspan', [1,0], 'N', N);
@@ -118,34 +118,28 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(Topt, imag
 for k=minLevel:maxLevel
     ML{k}.cleanup();
 end
-%close all;
+close all;
 
 % Plot result.
-% figure;
-% colormap gray;
-% subplot(2, 3, 1);
-% imagesc(image1);
-% axis image;
-% title('Template');
-% subplot(2, 3, 2);
-% imagesc(image2);
-% axis image;
-% title('Unknown');
-% subplot(2, 3, 3);
-% imagesc(ML{maxLevel}.R);
-% axis square;
-% title('Measurements');
-% ylabel('Directions');
-% subplot(2, 3, 4);
-% imagesc(Topt);
-% axis image;
-% title('Deformed template');
-% subplot(2, 3, 5);
-% imagesc(abs(Topt - image2));
-% axis image;
-% title('Error in image');
-% subplot(2, 3, 6);
-% imagesc(abs(ML{maxLevel}.K(Topt) - ML{maxLevel}.R));
-% axis square;
-% title('Error in measurements');
-% ylabel('Directions');
+figure;
+colormap gray;
+subplot(2, 3, 1);
+viewImage(image1, omega, m);
+title('Template');
+subplot(2, 3, 2);
+viewImage(image2, omega, m);
+title('Unknown');
+subplot(2, 3, 3);
+viewImage(ML{maxLevel}.R, omega, size(ML{maxLevel}.R));
+title('Measurements');
+subplot(2, 3, 4);
+viewImage(Topt, omega, m);
+title('Deformed template');
+subplot(2, 3, 5);
+viewImage(abs(Topt - image2), omega, m);
+title('Error in image');
+subplot(2, 3, 6);
+viewImage(abs(ML{maxLevel}.K(Topt) - ML{maxLevel}.R), omega, size(ML{maxLevel}.R));
+axis square;
+title('Error in measurements');
+ylabel('Directions');

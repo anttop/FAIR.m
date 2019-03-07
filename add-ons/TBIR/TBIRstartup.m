@@ -18,4 +18,4 @@
 % This script adds required libraries to the MATLAB path.
 
 % ASTRA Toolbox is required for the Radon transform.
-addpath(genpath(fullfile('../../', 'astra', 'matlab')));
+addpath(genpath(fullfile('../', 'astra', 'matlab')));

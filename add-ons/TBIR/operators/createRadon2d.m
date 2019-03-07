@@ -46,11 +46,11 @@ ndet = ceil(hypot(m(1), m(2)));
 vol_geom = astra_create_vol_geom(m);
 proj_geom = astra_create_proj_geom('parallel', 1.0, ndet, theta * pi / 180);
 
-% Create operators.
+% Create operator function handles.
 K = @(x) radon2d(reshape(x, m), proj_geom, vol_geom);
 Kadj = @(x) reshape(radon2dadj(x, proj_geom, vol_geom), [], 1);
 
-% Create cleanup function.
+% Create cleanup function handle.
 cleanup = @() astra_cleanup(proj_geom, vol_geom);
 
 end

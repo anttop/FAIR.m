@@ -76,11 +76,6 @@ for k=minLevel:maxLevel
     [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta);
 end
 
-% Free resources.
-for k=minLevel:maxLevel
-    ML{k}.cleanup();
-end
-
 % Create measurements on finest level.
 ML{maxLevel}.R = ML{maxLevel}.K(img);
 
@@ -90,5 +85,10 @@ ML = multilevelRadon2d(ML, maxLevel, minLevel);
 % Check if size of downsampled data matches output of Radon operator.
 for k=minLevel:maxLevel-1
     verifyEqual(testCase, size(ML{k}.R), size(ML{k}.K(ML{k}.T)));
+end
+
+% Free resources.
+for k=minLevel:maxLevel
+    ML{k}.cleanup();
 end
 end

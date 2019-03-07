@@ -67,6 +67,12 @@ In order to work with the abovementioned version type:
 
 % TODO: Add info that only matrix-free operators are supported at the moment.
 
+In order to use GPU support MATLAB may be required to be started with:
+
+>> LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 \
+>> LD_LIBRARY_PATH={LOCATION_OF_ASTRA}/astra/lib \
+>> matlab-r2017b
+
 Make sure to download ASTRA Toolbox and to set the path in TBIRstartup.m 
 properly. Then simply run the FAIR startup script (FAIRstartup.m) and
 subsequently the TBIR startup script.
@@ -74,6 +80,9 @@ subsequently the TBIR startup script.
 To run the test cases execute
 
 >> runtests('test')
+
+% TODO: script runtests.sh
+% TODO: If no GPU available all tests will pass but 3D Radon tests will throw warnings.
 
 The figures in the paper were created with the following scripts:
 

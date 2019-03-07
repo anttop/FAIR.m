@@ -46,7 +46,7 @@ for k=minLevel:maxLevel-1
 end
 end
 
-function checkRadon2DDetectorSizeTest(testCase)
+function checkRadon3dDetectorSizeTest(testCase)
 
 
 % Set up test image and projection angles.
@@ -71,7 +71,7 @@ try
     ML{maxLevel}.R = ML{maxLevel}.K(data);
 
     % Create multilevel versions of data.
-    ML = multilevelRadon2d(ML, maxLevel, minLevel);
+    ML = multilevelRadon3d(ML, maxLevel, minLevel);
 
     % Check if size of downsampled data matches output of Radon operator.
     for k=minLevel:maxLevel-1

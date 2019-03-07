@@ -36,7 +36,7 @@ verifyEqual(testCase, ndet, [m(3), ceil(sqrt(sum(m(1:2).^2)))]);
 try
     % Apply operator and check size.
     y = K(data(:));
-    verifyEqual(testCase, size(y), [ceil(sqrt(sum(m(1:2).^2))), length(theta), ceil(sqrt(sum(m(1:2).^2)))]);
+    verifyEqual(testCase, size(y), [ceil(sqrt(sum(m(1:2).^2))), length(theta), m(3)]);
 
     % Apply adjoint and check size.
     xrecon = Kadj(y);
@@ -56,7 +56,7 @@ function adjointnessTest(testCase)
 data = rand(100, 100, 40);
 m = size(data);
 theta = 0:10:179;
-n = [ceil(sqrt(sum(m(1:2).^2))), length(theta), ceil(sqrt(sum(m(1:2).^2)))];
+n = [ceil(sqrt(sum(m(1:2).^2))), length(theta), m(3)];
 meas = rand(n);
 
 % Set GPU.

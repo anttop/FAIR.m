@@ -22,8 +22,8 @@ clc;
 
 % Load images.
 D = load('mice3D', 'dataT', 'dataR');
-source = double(D.dataT);
-target = double(D.dataR);
+image1 = double(D.dataT);
+image2 = double(D.dataR);
 
 % Save size of template.
 m = size(image1);

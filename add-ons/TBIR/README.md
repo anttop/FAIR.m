@@ -54,7 +54,7 @@ GitHub: https://github.com/astra-toolbox/astra-toolbox
 URL: https://www.astra-toolbox.com/
 Version used: 3d07f5b
 
->> git clone https://github.com/astra-toolbox/astra-toolbox
+>> git clone https://github.com/astra-toolbox/astra-toolbox.git
 
 In order to work with the abovementioned version type:
 
@@ -74,8 +74,10 @@ LD_LIBRARY_PATH={LOCATION_OF_ASTRA}/astra/lib \
 matlab-r2017b
 
 Make sure to download ASTRA Toolbox and to set the path in TBIRstartup.m 
-properly. Then simply run the FAIR startup script (FAIRstartup.m) and
-subsequently the TBIR startup script.
+properly. Then simply run the startup scripts:
+
+>> run('FAIRstartup.m')
+>> run('TBIRstartup.m')
 
 To run the test cases execute
 
@@ -95,4 +97,4 @@ donation of the Quadro P6000 GPU used for this research.
 
 The artificial brain phantom is taken from:
 
-M. Guerquin-Kern, L. Lejeune, K. P. Pruessmann, and M. Unser. Realistic Analytical Phantoms for Parallel Magnetic Resonance Imaging, IEEE Transactions on Medical Imaging, vol. 31, no. 3, pp. 626-636, March 2012.
+    M. Guerquin-Kern, L. Lejeune, K. P. Pruessmann, and M. Unser. Realistic Analytical Phantoms for Parallel Magnetic Resonance Imaging, IEEE Transactions on Medical Imaging, vol. 31, no. 3, pp. 626-636, March 2012.

@@ -20,9 +20,9 @@ function [resfile, paramfile] = saveresults(name, outputfolder, image1,...
 %SAVERESULTS A script that saves results and parameters.
 
 % Create string for result filename.
-str = sprintf('%s_params_%s_%s_%.2f', name, dist, reg, sigma);
+str = sprintf('%s_params_%s_%s_%s_%.2f', name, dist, reg, objfun, sigma);
 resfile = fullfile(outputfolder, sprintf('%s.png', str));
-str = sprintf('%s_result_%s_%s_%.2f', name, dist, reg, sigma);
+str = sprintf('%s_result_%s_%s_%s_%.2f', name, dist, reg, objfun, sigma);
 paramfile = fullfile(outputfolder, sprintf('%s.txt', str));
 
 % Save result.

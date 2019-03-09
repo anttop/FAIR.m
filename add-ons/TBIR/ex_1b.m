@@ -97,7 +97,7 @@ NPIRpara.scheme = @GaussNewtonLDDMM;
 [ML, minLevel, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
 
 % Set directions for Radon transform.
-theta = linspace2(0, 180 / 3, 6);
+theta = linspace(0, 60, 6);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel

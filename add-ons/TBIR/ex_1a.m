@@ -61,7 +61,7 @@ image2 = double(imread(fullfile(path, file2)));
 m = size(image1);
 
 % Set directions for Radon transform.
-theta = linspace2(0, pi / 3, 6);
+theta = linspace(0, pi / 3, 6);
 
 % Set up detector size and geometries.
 ndet = ceil(hypot(m(1), m(2)));

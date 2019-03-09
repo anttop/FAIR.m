@@ -15,7 +15,7 @@
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 %
-% This script creates the results shown in Figure 3.
+% This script creates the results shown in Figure 5.
 % Results are saved to the folder 'results'. When run for the first time,
 % measurements (sinograms) are created and also saved to the results
 % folder. In every subsequent run these measurements are used again. Make
@@ -25,27 +25,30 @@ close all;
 clc;
 
 % Flag that activates plotting.
-plot = false;
+plot = true;
 
 % Set results output folder.
-outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_2');
+outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_4');
 mkdir(outputfolder);
 
 % Name of dataset.
-name = 'Hands';
+name = 'Disk';
 
-% Load images.
-path = fullfile(FAIRpath, 'kernel', 'data');
-file1 = 'hands-R.jpg';
-file2 = 'hands-T.jpg';
-image1 = double(imread(fullfile(path, file1)));
-image2 = 0.5 * double(imread(fullfile(path, file2)));
+% Create images having equal total mass.
+image1 = 255 * double(createdisk([128, 128], [60, 60], 12));
+%image1 = imgaussfilt(image1, 0.5, 'FilterSize', 5);
+image2 = double(createdisk([128, 128], [40, 40], 24));
+%image2 = imgaussfilt(image2, 0.5, 'FilterSize', 5);
+image2 = sum(image1(:)) * image2 / sum(image2(:));
 
 % Save size of template.
 m = size(image1);
 
 % Set bumber of Runge-Kutta steps.
 N = 5;
+
+% Define data term.
+dist = 'NCC_op';
 
 % Define regularization term.
 reg = 'mfCurvatureST';
@@ -73,6 +76,7 @@ omegaV(1:2:end) = omegaV(1:2:end) - pad;
 omegaV(2:2:end) = omega(2:2:end) + pad;
 
 % Initialize models.
+distance('reset', 'distance', dist);
 imgModel('reset', 'imgModel', imageModel);
 trafo('reset', 'trafo', 'affine2D');
 viewImage('reset', 'viewImage', 'viewImage2D', 'colormap', gray(256));
@@ -84,7 +88,7 @@ NPIRpara.scheme = @GaussNewtonLDDMM;
 [ML, minLevel, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
 
 % Set directions for Radon transform.
-theta = linspace(0, 75, 5);
+theta = linspace(0, 90, 5);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
@@ -122,19 +126,15 @@ imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)))
 % Create multilevel versions of measurements.
 ML = multilevelRadon2d(ML, maxLevel, minLevel);
 
-%% SSD + transport equation example.
-
-% Define data term.
-dist = 'SSD_op';
+%% NCC + transport equation example.
 
 % Define objective.
 objfun = 'LDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [2200, 100];
+alpha = [2000, 10];
 
 % Run indirect registration.
-distance('reset', 'distance', dist);
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
     'alpha', alpha, 'HessianShift', hessianShift);
 [vc, ~, ~, his] = MLLDDMM(ML, 'operator', true, 'minLevel',...
@@ -156,19 +156,15 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec1, imag
     ML{maxLevel}.R, rec1, dist, reg, objfun, imageModel, N, nt,...
     alpha, theta, sigma, his.time);
 
-%% NCC + transport equation example.
-
-% Define data term.
-dist = 'NCC_op';
+%% NCC + continuity equation example.
 
 % Define objective.
-objfun = 'LDDMMobjFctn';
+objfun = 'MPLDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [300, 10];
+alpha = [2000, 10];
 
 % Run indirect registration.
-distance('reset', 'distance', dist);
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
     'alpha', alpha, 'HessianShift', hessianShift);
 [vc, ~, ~, his] = MLLDDMM(ML, 'operator', true, 'minLevel',...
@@ -179,8 +175,9 @@ regularizer('reset', 'regularizer', reg, 'nt', nt,...
 % Transform template and reshape.
 yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m),...
     'omega', omegaV, 'm', m, 'nt', nt, 'tspan', [1, 0], 'N', N);
+Jac = geometry(yc, m, 'Jac', 'omega', omega);
 rec2 = linearInterMex(ML{maxLevel}.T, omega, center(yc, m));
-rec2 = reshape(rec2, m);
+rec2 = reshape(rec2 .* Jac, m);
 
 % Output stats.
 fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec2, image2));
@@ -188,40 +185,6 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec2, imag
 % Save result.
 [resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
     ML{maxLevel}.R, rec2, dist, reg, objfun, imageModel, N, nt,...
-    alpha, theta, sigma, his.time);
-
-%% NCC + continuity equation example.
-
-% Define data term.
-dist = 'NCC_op';
-
-% Define objective.
-objfun = 'MPLDDMMobjFctn';
-
-% Set regularization parameters.
-alpha = [500, 100];
-
-% Run indirect registration.
-distance('reset', 'distance', dist);
-regularizer('reset', 'regularizer', reg, 'nt', nt,...
-    'alpha', alpha, 'HessianShift', hessianShift);
-[vc, ~, ~, his] = MLLDDMM(ML, 'operator', true, 'minLevel',...
-    minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV,...
-    'N', N, 'parametric', false, 'NPIRpara', NPIRpara,...
-    'NPIRobj', str2func(objfun), 'plots', plot);
-
-% Transform template and reshape.
-yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m),...
-    'omega', omegaV, 'm', m, 'nt', nt, 'tspan', [1, 0], 'N', N);
-rec3 = linearInterMex(ML{maxLevel}.T, omega, center(yc, m));
-rec3 = reshape(rec3, m);
-
-% Output stats.
-fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec3, image2));
-
-% Save result.
-[resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
-    ML{maxLevel}.R, rec3, dist, reg, objfun, imageModel, N, nt,...
     alpha, theta, sigma, his.time);
 
 %% Cleanup and show results.
@@ -250,15 +213,11 @@ if(plot)
     title('Measurements');
     ylabel('Directions');
     subplot(2, 3, 4);
-    imagesc(rec2);
+    imagesc(rec1);
     axis image;
     title('NCC, transport equation');
     subplot(2, 3, 5);
-    imagesc(rec1);
-    axis image;
-    title('SSD, transport equation');
-    subplot(2, 3, 6);
-    imagesc(rec3);
+    imagesc(rec2);
     axis image;
     title('NCC, continuity equation');
 end

@@ -16,7 +16,10 @@
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 %
 % This script creates the results shown in Figure 2.
-% TODO: Add info about sinograms being stored.
+% Results are saved to the folder 'results'. When run for the first time,
+% measurements (sinograms) are created and also saved to the results
+% folder. In every subsequent run these measurements are used again. Make
+% sure to delete these files when you change the images or their sizes.
 clear;
 close all;
 clc;
@@ -66,8 +69,8 @@ sigma = {0, 0.05, 0.1,...
          0, 0.05, 0.1};
 
 % Set regularization parameters.
-alpha = {[5e0, 5e0], [5e0, 5e0], [5e0, 5e0],...
-         [5e0, 5e0], [5e0, 5e0], [5e0, 5e0]};
+alpha = {[5, 10], [50, 10], [110, 10],...
+         [4000, 10], [8000, 10], [180000, 10]};
 
 % Set Hessian shift.
 hessianShift = 1e-2;
@@ -171,38 +174,4 @@ if(plot)
         imagesc(rec{k});
         axis image;
     end
-end
-
-function [resfile, paramfile] = saveresults(name, outputfolder, image1,...
-    image2, ~, rec, dist, reg, objfun, imageModel, N, nt, alpha, theta,...
-    sigma, elapsed)
-
-% Create string for result filename.
-str = sprintf('%s_params_%s_%s_%.2f', name, dist, reg, sigma);
-resfile = fullfile(outputfolder, sprintf('%s.png', str));
-str = sprintf('%s_result_%s_%s_%.2f', name, dist, reg, sigma);
-paramfile = fullfile(outputfolder, sprintf('%s.txt', str));
-
-% Save result.
-imwrite(rec / max(max(rec(:)), 255), resfile);
-
-% Save parameters.
-fid = fopen(paramfile, 'wt+');
-fprintf(fid, sprintf('Distance:\t %s\n',dist));
-fprintf(fid, sprintf('Regulariser:\t %s\n', reg));
-fprintf(fid, sprintf('Objective:\t %s\n', objfun));
-fprintf(fid, sprintf('Image model:\t %s\n', imageModel));
-fprintf(fid, sprintf('RK steps:\t %i\n', N));
-fprintf(fid, sprintf('Time steps:\t %i\n', nt));
-for k=1:length(alpha)
-    fprintf(fid, sprintf('Alpha %i:\t %g\n', k, alpha(k)));
-end
-fprintf(fid, sprintf('Angles (deg.):\t %s\n', num2str(theta)));
-fprintf(fid, sprintf('Noise level:\t %g\n', sigma));
-fprintf(fid, sprintf('SSIM (recon.):\t %g\n', ssim(rec, image2)));
-fprintf(fid, sprintf('SSIM (ref.):\t %g\n', ssim(image1, image2)));
-fprintf(fid, sprintf('PSNR (recon.):\t %g\n', psnr(rec, image2)));
-fprintf(fid, sprintf('PSNR (ref.):\t %g\n', psnr(image1, image2)));
-fprintf(fid, sprintf('Elapsed time:\t %g s\n', elapsed));
-
 end

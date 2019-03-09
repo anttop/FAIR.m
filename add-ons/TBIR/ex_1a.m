@@ -75,7 +75,7 @@ Kadj = @(x) radon2dadj(x, proj_geom, vol_geom);
 % Create cleanup function handle.
 cleanup = @() astra_cleanup(proj_geom, vol_geom);
 
-% Create measurements and add noise.
+% Create measurements.
 R = K(image2);
 
 % Set regularisation parameter.

@@ -37,6 +37,9 @@ clear;
 close all;
 clc;
 
+% Flag that activates plotting.
+plot = false;
+
 % toolbox_optim is used for computing TV reconstructions.
 addpath(genpath(fullfile(FAIRpath, '../', 'matlab-toolboxes', 'toolbox_optim')));
 
@@ -130,33 +133,35 @@ imwrite(rec2 / max(max(rec2(:)), 255), fullfile(outputfolder, sprintf('%s_result
 imwrite(rec3 / max(max(rec3(:)), 255), fullfile(outputfolder, sprintf('%s_result_L2TV_with_template.png', name)));
 
 % Plot result.
-figure;
-colormap gray;
-subplot(2, 3, 1);
-imagesc(image1);
-axis image;
-title('Template image');
-subplot(2, 3, 2);
-imagesc(image2);
-axis image;
-title('Unknown image');
-subplot(2, 3, 3);
-imagesc(R);
-axis square;
-title('Measurements');
-ylabel('Directions');
-subplot(2, 3, 4);
-imagesc(rec1);
-axis image;
-title('FBP reconstruction');
-subplot(2, 3, 5);
-imagesc(rec2);
-axis image;
-title('TV reconstruction');
-subplot(2, 3, 6);
-imagesc(rec3);
-axis image;
-title('TV reconstruction with template');
+if(plot)
+    figure;
+    colormap gray;
+    subplot(2, 3, 1);
+    imagesc(image1);
+    axis image;
+    title('Template image');
+    subplot(2, 3, 2);
+    imagesc(image2);
+    axis image;
+    title('Unknown image');
+    subplot(2, 3, 3);
+    imagesc(R);
+    axis square;
+    title('Measurements');
+    ylabel('Directions');
+    subplot(2, 3, 4);
+    imagesc(rec1);
+    axis image;
+    title('FBP reconstruction');
+    subplot(2, 3, 5);
+    imagesc(rec2);
+    axis image;
+    title('TV reconstruction');
+    subplot(2, 3, 6);
+    imagesc(rec3);
+    axis image;
+    title('TV reconstruction with template');
+end
 
 function sino = radon2d(data, proj_geom, vol_geom)
     proj_id = astra_create_projector('linear', proj_geom, vol_geom);

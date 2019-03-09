@@ -21,6 +21,9 @@ clear;
 close all;
 clc;
 
+% Flag that activates plotting.
+plot = false;
+
 % Set results output folder.
 outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_1');
 mkdir(outputfolder);
@@ -136,7 +139,7 @@ for k=1:length(alpha)
     [vc, ~, ~, his] = MLLDDMM(ML, 'operator', true, 'minLevel',...
         minLevel, 'maxLevel', maxLevel, 'omegaV', omegaV, 'mV', mV,...
         'N', N, 'parametric', false, 'NPIRpara', NPIRpara,...
-        'NPIRobj', str2func(objfun), 'plots', true);
+        'NPIRobj', str2func(objfun), 'plots', plot);
 
     % Transform template and reshape.
     yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m),...
@@ -160,12 +163,14 @@ end
 close all;
 
 % Plot result.
-figure;
-colormap gray;
-for k=1:length(alpha)
-    subplot(3, 3, k);
-    imagesc(rec{k});
-    axis image;
+if(plot)
+    figure;
+    colormap gray;
+    for k=1:length(alpha)
+        subplot(3, 3, k);
+        imagesc(rec{k});
+        axis image;
+    end
 end
 
 function [resfile, paramfile] = saveresults(name, outputfolder, image1,...

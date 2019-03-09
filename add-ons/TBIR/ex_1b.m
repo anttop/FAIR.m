@@ -22,7 +22,7 @@ close all;
 clc;
 
 % Set results output folder.
-outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'Ex_1');
+outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_1');
 mkdir(outputfolder);
 
 % Name of dataset.

@@ -25,10 +25,10 @@ close all;
 clc;
 
 % Flag that activates plotting.
-plot = true;
+plot = false;
 
 % Set results output folder.
-outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_1');
+outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_3');
 mkdir(outputfolder);
 
 % Name of dataset.
@@ -39,7 +39,7 @@ path = fullfile(FAIRpath, 'kernel', 'data');
 file1 = 'HNSP-R.jpg';
 file2 = 'HNSP-T.jpg';
 image1 = double(imread(fullfile(path, file1)));
-image2 = 0.5 * double(imread(fullfile(path, file2)));
+image2 = double(imread(fullfile(path, file2)));
 
 % Save size of template.
 m = size(image1);

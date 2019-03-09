@@ -25,7 +25,7 @@ close all;
 clc;
 
 % Flag that activates plotting.
-plot = true;
+plot = false;
 
 % Set results output folder.
 outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_4');

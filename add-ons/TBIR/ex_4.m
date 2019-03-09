@@ -36,9 +36,7 @@ name = 'Disk';
 
 % Create images having equal total mass.
 image1 = 255 * double(createdisk([128, 128], [60, 60], 12));
-%image1 = imgaussfilt(image1, 0.5, 'FilterSize', 5);
 image2 = double(createdisk([128, 128], [40, 40], 24));
-%image2 = imgaussfilt(image2, 0.5, 'FilterSize', 5);
 image2 = sum(image1(:)) * image2 / sum(image2(:));
 
 % Save size of template.
@@ -132,7 +130,7 @@ ML = multilevelRadon2d(ML, maxLevel, minLevel);
 objfun = 'LDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [2000, 10];
+alpha = [20, 10];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
@@ -162,7 +160,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec1, imag
 objfun = 'MPLDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [2000, 10];
+alpha = [20, 10];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
@@ -200,11 +198,11 @@ if(plot)
     figure;
     colormap gray;
     subplot(2, 3, 1);
-    imagesc(image1);
+    imagesc(image1, [0, 255]);
     axis image;
     title('Template image');
     subplot(2, 3, 2);
-    imagesc(image2);
+    imagesc(image2, [0, 255]);
     axis image;
     title('Unknown image');
     subplot(2, 3, 3);
@@ -213,11 +211,11 @@ if(plot)
     title('Measurements');
     ylabel('Directions');
     subplot(2, 3, 4);
-    imagesc(rec1);
+    imagesc(rec1, [0, 255]);
     axis image;
     title('NCC, transport equation');
     subplot(2, 3, 5);
-    imagesc(rec2);
+    imagesc(rec2, [0, 255]);
     axis image;
     title('NCC, continuity equation');
 end

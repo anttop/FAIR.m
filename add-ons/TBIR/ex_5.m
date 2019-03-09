@@ -38,7 +38,7 @@ mkdir(outputfolder);
 name = 'Knee';
 
 % Load images.
-D = load('knee3D', 'dataT', 'dataR');
+D = load('mice3D', 'dataT', 'dataR');
 image1 = double(D.dataT);
 image2 = double(D.dataR);
 

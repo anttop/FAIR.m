@@ -125,9 +125,9 @@ imwrite(image1 / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
 imwrite(image2 / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
 Rsq = imresize(R, [size(R, 2), size(R, 2)], 'nearest');
 imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
-imwrite(rec1 / max(rec1(:)), fullfile(outputfolder, sprintf('%s_result_FBP.png', name)));
-imwrite(rec2 / max(rec2(:)), fullfile(outputfolder, sprintf('%s_result_L2TV.png', name)));
-imwrite(rec3 / max(rec3(:)), fullfile(outputfolder, sprintf('%s_result_L2TV_with_template.png', name)));
+imwrite(rec1 / max(max(rec1(:)), 255), fullfile(outputfolder, sprintf('%s_result_FBP.png', name)));
+imwrite(rec2 / max(max(rec2(:)), 255), fullfile(outputfolder, sprintf('%s_result_L2TV.png', name)));
+imwrite(rec3 / max(max(rec3(:)), 255), fullfile(outputfolder, sprintf('%s_result_L2TV_with_template.png', name)));
 
 % Plot result.
 figure;

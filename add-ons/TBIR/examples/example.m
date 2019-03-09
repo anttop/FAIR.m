@@ -50,22 +50,19 @@ nt = 1;
 sigma = 0.05;
 
 % Set regularization parameters (in order: space, time, L2-norm squared).
-% The following parameters can be given as array
 alpha = [5e0, 5e0, 0];
 
 % Set Hessian shift.
 hessianShift = 1e-2;
 
-% Fixed paramters
-pad = 0.5;
-
 % Set domain size.
 omega = [0, 1, 0, 1];
 
 % Set domain for velocities by padding.
+pad = 0.5;
 omegaV = omega;
-omegaV(1:2:end) = omegaV(1:2:end)-pad;
-omegaV(2:2:end) = omega(2:2:end)+pad;
+omegaV(1:2:end) = omegaV(1:2:end) - pad;
+omegaV(2:2:end) = omega(2:2:end) + pad;
 
 % Initialize models.
 imgModel('reset', 'imgModel', imageModel);
@@ -90,10 +87,7 @@ for k=minLevel:maxLevel
 end
 
 % Apply operator on finest level to generate synthetic measurements.
-xc = getCellCenteredGrid(ML{maxLevel}.omega, ML{maxLevel}.m);
-[~, R] = imgModel('coefficients', ML{maxLevel}.T, image2, omega);
-R = imgModel(R, omega, center(xc, m));
-ML{maxLevel}.R = ML{maxLevel}.K(R);
+ML{maxLevel}.R = ML{maxLevel}.K(image2);
 
 % Add noise to measurements.
 ML{maxLevel}.R = addnoise(ML{maxLevel}.R, sigma);

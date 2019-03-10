@@ -76,7 +76,7 @@ end;
 [Jc,para,dJ,H] = fctn(vc);
 Jac = geometry(para.yc,para.m-1,'Jac','matrixFree',true,'omega',para.omega);
 Plots('start',para);
-iter = 0; yOld = 0*vc; Jold = Jc; y0 = para.yc;
+iter = 0; yOld = 0*para.yc; Jold = Jc; y0 = para.yc;
 
 hisStr    = {'iter','J','Jold-J','|\nabla J|','|dy|','LS','min(Jac)','max(Jac)','nnz(H)','iterCG','relres'};
 his        = zeros(maxIter+2,11);

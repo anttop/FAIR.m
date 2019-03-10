@@ -51,12 +51,12 @@ N = 5;
 dist = 'NCC_op';
 
 % Define regularization term.
-reg = {'mfCurvatureST', 'mfDiffusionST',...
-       'mfCurvatureST', 'mfDiffusionST'};
+reg = {'mfThirdOrderST', 'mfCurvatureST', 'mfDiffusionST',...
+       'mfThirdOrderST','mfCurvatureST', 'mfDiffusionST'};
 
 % Define objective.
-objfun = {'MPLDDMMobjFctn', 'MPLDDMMobjFctn',...
-          'LDDMMobjFctn', 'LDDMMobjFctn'};
+objfun = {'MPLDDMMobjFctn', 'MPLDDMMobjFctn', 'MPLDDMMobjFctn',...
+          'LDDMMobjFctn', 'LDDMMobjFctn', 'LDDMMobjFctn'};
 
 % Define image model.
 imageModel = 'splineInterMex';
@@ -66,12 +66,12 @@ imageModel = 'splineInterMex';
 nt = 1;
 
 % Define noise level.
-sigma = {0.05, 0.05,...
-         0.05, 0.05};
+sigma = {0.05, 0.05, 0.05,...
+         0.05, 0.05, 0.05};
 
 % Set regularization parameters.
-alpha = {[20, 10], [200, 10],...
-         [20, 10], [200, 10]};
+alpha = {[20, 10, 1e-5], [20, 10], [200, 10],...
+         [20, 10, 1e-5], [20, 10], [200, 10]};
 
 % Set Hessian shift.
 hessianShift = 1e-2;

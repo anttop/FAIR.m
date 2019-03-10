@@ -94,7 +94,7 @@ if rebuild
     switch reg
         case {'mbDiffusionCC','mfDiffusionCC','mbDiffusionST','mfDiffusionST'}
             D = alpha(1)*hd*D;
-        case {'mbCurvature','mfCurvature','mbCurvatureST','mfCurvatureST'}
+        case {'mbCurvature','mfCurvature','mbCurvatureST','mfCurvatureST','mfThirdOrderST'}
             D = alpha(1)*hd*D.^2;
     end
 
@@ -103,7 +103,7 @@ if rebuild
             eigInv = reshape(1./(s1+s2*D),m);
             eigInv(isinf(eigInv) | isnan(eigInv)) = 1;
 
-        case {'mbDiffusionST','mfDiffusionST', 'mbCurvatureST','mfCurvatureST'}
+        case {'mbDiffusionST','mfDiffusionST', 'mbCurvatureST','mfCurvatureST','mfThirdOrderST'}
             D = dt*D;
 
             eig1 = reshape(1./(s1+.5*s2*D),[],1);
@@ -122,7 +122,7 @@ end
 switch reg
     case {'mbDiffusionCC','mfDiffusionCC','mbCurvature','mfCurvature'}
         getEig = @(k) eigInv;
-    case {'mbDiffusionST','mfDiffusionST', 'mbCurvatureST','mfCurvatureST'}
+    case {'mbDiffusionST','mfDiffusionST', 'mbCurvatureST','mfCurvatureST','mfThirdOrderST'}
         getEig = @(k) reshape(eigInv(:,1+((k>1)&&(k<nt+1))),m);
 end
 % discrete cosine transform diagonalized inversion

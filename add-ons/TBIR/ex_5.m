@@ -25,7 +25,7 @@ close all;
 clc;
 
 % Flag that activates plotting.
-plot = true;
+plot = false;
 
 % Set GPU.
 gpuIdx = 0;
@@ -35,7 +35,7 @@ outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_5');
 mkdir(outputfolder);
 
 % Name of dataset.
-name = 'Knee';
+name = 'Mice3D';
 
 % Load images.
 D = load('mice3D', 'dataT', 'dataR');

@@ -48,11 +48,12 @@ m = size(image1);
 N = 5;
 
 % Define data term.
-dist = 'SSD_op';
+dist = 'NCC_op';
 
 % Define regularization term.
 reg = {'mfCurvatureST', 'mfCurvatureST', 'mfCurvatureST',...
-       'mfDiffusionST', 'mfDiffusionST', 'mfDiffusionST'};
+       'mfDiffusionST', 'mfDiffusionST', 'mfDiffusionST',...
+       'mfThirdOrderST', 'mfThirdOrderST', 'mfThirdOrderST'};
 
 % Define objective.
 objfun = 'LDDMMobjFctn';
@@ -66,11 +67,13 @@ nt = 1;
 
 % Define noise level.
 sigma = {0, 0.05, 0.1,...
+         0, 0.05, 0.1,...
          0, 0.05, 0.1};
 
 % Set regularization parameters.
 alpha = {[5, 10], [50, 10], [110, 10],...
-         [4000, 10], [8000, 10], [180000, 10]};
+         [4000, 10], [8000, 10], [180000, 10],...
+         [8e-3, 10, 1e-5], [2e-2, 10, 1e-5], [1, 10, 1e-5]};
 
 % Set Hessian shift.
 hessianShift = 1e-2;
@@ -107,7 +110,8 @@ end
 % Run algorithm for each setting.
 mV = @(m) ceil(1*m);
 rec = cell(length(alpha), 1);
-for k=1:length(alpha)
+idx = 1:length(alpha);
+for k=idx
     % Check if measurements exists, otherwise create.
     sinogramfile = fullfile(outputfolder, 'Sinograms', sprintf('%s_sino_%g.mat', name, sigma{k}));
     if(exist(sinogramfile, 'file'))

@@ -49,7 +49,7 @@ N = 5;
 dist = 'NCC_op';
 
 % Define regularization term.
-reg = 'mfCurvatureST';
+reg = 'mfThirdOrderST';
 
 % Define image model.
 imageModel = 'splineInterMex';
@@ -130,7 +130,7 @@ ML = multilevelRadon2d(ML, maxLevel, minLevel);
 objfun = 'LDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [20, 10];
+alpha = [20, 10, 1e-5];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
@@ -160,7 +160,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec1, imag
 objfun = 'MPLDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [20, 10];
+alpha = [20, 10, 1e-5];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...

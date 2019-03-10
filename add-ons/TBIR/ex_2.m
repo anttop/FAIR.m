@@ -38,7 +38,7 @@ name = 'Hands';
 path = fullfile(FAIRpath, 'kernel', 'data');
 file1 = 'hands-R.jpg';
 file2 = 'hands-T.jpg';
-image1 = double(imread(fullfile(path, file1)));
+image1 = double(imresize(imread(fullfile(path, file1)), [128, 128]));
 image2 = 0.5 * double(imread(fullfile(path, file2)));
 
 % Save size of template.

@@ -38,8 +38,8 @@ name = 'Brain';
 path = fullfile(FAIRpath, 'add-ons', 'TBIR', 'data');
 file1 = 'brain-T.png';
 file2 = 'brain-R.png';
-image1 = double(imread(fullfile(path, file1)));
-image2 = double(imread(fullfile(path, file2)));
+image1 = double(imresize(imread(fullfile(path, file1)), [128, 128]));
+image2 = double(imresize(imread(fullfile(path, file2)), [128, 128]));
 
 % Save size of template.
 m = size(image1);

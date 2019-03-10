@@ -38,8 +38,8 @@ name = 'HNSP';
 path = fullfile(FAIRpath, 'kernel', 'data');
 file1 = 'HNSP-R.jpg';
 file2 = 'HNSP-T.jpg';
-image1 = double(imread(fullfile(path, file1)));
-image2 = double(imread(fullfile(path, file2)));
+image1 = double(imresize(imread(fullfile(path, file1)), [128, 128]));
+image2 = double(imresize(imread(fullfile(path, file2)), [128, 128]));
 
 % Save size of template.
 m = size(image1);

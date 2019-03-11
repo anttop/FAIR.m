@@ -84,7 +84,7 @@ omegaV(2:2:end) = omega(2:2:end) + pad;
 
 % Initialize models.
 imgModel('reset', 'imgModel', imageModel);
-trafo('reset', 'trafo', 'affine2D');
+trafo('reset', 'trafo', 'affine3D');
 distance('reset', 'distance', dist);
 viewImage('reset', 'viewImage', 'imgmontage', 'direction', '-zyx', 'colormap', gray(256));
 NPIRpara = optPara('NPIR-GN');
@@ -124,11 +124,11 @@ else
 end
 
 % Save template, unknown image, and measurements to results folder.
-imwrite(image1 / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
-imwrite(image2 / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
-Rsize = size(ML{maxLevel}.R, 2);
-Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
-imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
+%imwrite(image1 / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
+%imwrite(image2 / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
+%Rsize = size(ML{maxLevel}.R, 2);
+%Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
+%imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
 
 % Create multilevel versions of measurements.
 ML = multilevelRadon2d(ML, maxLevel, minLevel);

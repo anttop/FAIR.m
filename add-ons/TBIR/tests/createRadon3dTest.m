@@ -56,7 +56,7 @@ function adjointnessTest(testCase)
 data = rand(100, 100, 40);
 m = size(data);
 theta = 0:10:179;
-n = [ceil(sqrt(sum(m(1:2).^2))), length(theta), m(3)];
+n = [1.5 * m(1), length(theta), m(3)];
 meas = rand(n);
 
 % Set GPU.

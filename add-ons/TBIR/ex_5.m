@@ -68,7 +68,7 @@ nt = 1;
 sigma = 0.05;
 
 % Set regularization parameters.
-alpha = [10, 10];
+alpha = [5, 5];
 
 % Set Hessian shift.
 hessianShift = 1e-2;

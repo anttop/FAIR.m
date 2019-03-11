@@ -71,7 +71,7 @@ In order to work with the abovementioned version type:
 In order to use GPU support MATLAB may be required to be started with:
 
 >> LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 \
-LD_LIBRARY_PATH={LOCATION_OF_ASTRA}/astra/lib \
+LD_LIBRARY_PATH=/home/ll542/store/git/astra/lib \
 matlab-r2017b
 
 Make sure to download ASTRA Toolbox and to set the path in TBIRstartup.m 

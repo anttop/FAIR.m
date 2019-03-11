@@ -35,12 +35,12 @@ outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_5');
 mkdir(outputfolder);
 
 % Name of dataset.
-name = 'Mice3D';
+name = 'mice3D';
 
-% Load images.
+% Load images and resize to power of two.
 D = load('mice3D', 'dataT', 'dataR');
-image1 = double(D.dataT);
-image2 = double(D.dataR);
+image1 = double(imresize3(D.dataT, [32, 32, 32], 'Method', 'linear', 'Antialiasing', false));
+image2 = double(imresize3(D.dataR, [32, 32, 32], 'Method', 'linear', 'Antialiasing', false));
 
 % Save size of template.
 m = size(image1);
@@ -68,7 +68,7 @@ nt = 1;
 sigma = 0.05;
 
 % Set regularization parameters.
-alpha = [200, 10];
+alpha = [10, 10];
 
 % Set Hessian shift.
 hessianShift = 1e-2;
@@ -84,7 +84,7 @@ omegaV(2:2:end) = omega(2:2:end) + pad;
 
 % Initialize models.
 imgModel('reset', 'imgModel', imageModel);
-trafo('reset', 'trafo', 'affine3D');
+trafo('reset', 'trafo', 'affine2D');
 distance('reset', 'distance', dist);
 viewImage('reset', 'viewImage', 'imgmontage', 'direction', '-zyx', 'colormap', gray(256));
 NPIRpara = optPara('NPIR-GN');
@@ -95,11 +95,11 @@ NPIRpara.scheme = @GaussNewtonLDDMM;
 [ML, minLevel, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
 
 % Set directions for Radon transform.
-theta = linspace(0, 180, 10);
+theta = linspace(0, 179, 10);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
-    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon3d(size(ML{k}.T), theta, gpuIdx);
+    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon3d(ML{k}.m, theta, gpuIdx);
 end
 
 % Run algorithm for each setting.
@@ -124,14 +124,15 @@ else
 end
 
 % Save template, unknown image, and measurements to results folder.
-%imwrite(image1 / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
-%imwrite(image2 / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
+imwrite(flatten3d(image1) / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
+imwrite(flatten3d(image2) / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
 %Rsize = size(ML{maxLevel}.R, 2);
 %Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
 %imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
+imwrite(ML{maxLevel}.R / max(ML{maxLevel}.R(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
 
 % Create multilevel versions of measurements.
-ML = multilevelRadon2d(ML, maxLevel, minLevel);
+ML = multilevelRadon3d(ML, maxLevel, minLevel);
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
@@ -144,15 +145,15 @@ regularizer('reset', 'regularizer', reg, 'nt', nt,...
 % Transform template and reshape.
 yc = getTrafoFromInstationaryVelocityRK4(vc, getNodalGrid(omega,m),...
     'omega', omegaV, 'm', m, 'nt', nt, 'tspan', [1, 0], 'N', N);
-rec1 = linearInterMex(ML{maxLevel}.T, omega, center(yc, m));
-rec1 = reshape(rec1, m);
+rec = linearInterMex(ML{maxLevel}.T, omega, center(yc, m));
+rec = reshape(rec, m);
 
 % Output stats.
-fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec1, image2));
+fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec, image2));
 
 % Save result.
 [resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
-    ML{maxLevel}.R, rec1, dist, reg, objfun, imageModel, N, nt,...
+    ML{maxLevel}.R, rec, dist, reg, objfun, imageModel, N, nt,...
     alpha, theta, sigma, his.time);
 
 %% Cleanup and show results.
@@ -167,29 +168,21 @@ close all;
 if(plot)
     figure;
     colormap gray;
-    subplot(2, 3, 1);
-    imagesc(image1);
+    subplot(2, 2, 1);
+    imagesc(flatten3d(image1));
     axis image;
     title('Template image');
-    subplot(2, 3, 2);
-    imagesc(image2);
+    subplot(2, 2, 2);
+    imagesc(flatten3d(image2));
     axis image;
     title('Unknown image');
-    subplot(2, 3, 3);
-    imagesc(ML{maxLevel}.K(image2));
+    subplot(2, 2, 3);
+    imagesc(flatten3d(ML{maxLevel}.K(image2)));
     axis square;
     title('Measurements');
     ylabel('Directions');
-    subplot(2, 3, 4);
-    imagesc(rec2);
-    axis image;
-    title('NCC, transport equation');
-    subplot(2, 3, 5);
-    imagesc(rec1);
+    subplot(2, 2, 4);
+    imagesc(flatten3d(rec));
     axis image;
     title('SSD, transport equation');
-    subplot(2, 3, 6);
-    imagesc(rec3);
-    axis image;
-    title('NCC, continuity equation');
 end

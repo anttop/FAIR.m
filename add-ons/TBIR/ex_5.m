@@ -25,7 +25,7 @@ close all;
 clc;
 
 % Flag that activates plotting.
-plot = true;
+plot = false;
 
 % Set GPU.
 gpuIdx = 0;

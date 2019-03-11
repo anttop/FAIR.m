@@ -18,37 +18,15 @@ function tests = multilevelRadon2dTest
     tests = functiontests(localfunctions);
 end
 
-function oddSizeTest(testCase)
-
-% Create multilevel versions of image.
-img = phantom('Modified Shepp-Logan', 99);
-[ML, minLevel, maxLevel, ~] = getMultilevel(img, [0, 1, 0, 1], size(img), 'fig', 0);
-
-for k=minLevel:maxLevel
-    ML{k}.K = @(x) x;
-    ML{k}.ndet = size(img, 2);
-end
-
-% Create measurements on finest level.
-ML{maxLevel}.R = ML{maxLevel}.K(img);
-
-% Create multilevel versions of data.
-ML = multilevelRadon2d(ML, maxLevel, minLevel);
-
-for k=minLevel:maxLevel-1
-    verifyEqual(testCase, size(ML{k}.R, 2), ML{k}.ndet);
-end
-end
-
 function evenSizeTest(testCase)
 
 % Create multilevel versions of image.
-img = phantom('Modified Shepp-Logan', 100);
+img = phantom('Modified Shepp-Logan', 128);
 [ML, minLevel, maxLevel, ~] = getMultilevel(img, [0, 1, 0, 1], size(img), 'fig', 0);
 
 for k=minLevel:maxLevel
     ML{k}.K = @(x) x;
-    ML{k}.ndet = size(img, 2);
+    ML{k}.ndet = size(img, 2) * 2^(-maxLevel + k);
 end
 
 % Create measurements on finest level.
@@ -65,7 +43,7 @@ end
 function checkRadon2DDetectorSizeTest(testCase)
 
 % Create multilevel versions of image.
-img = phantom('Modified Shepp-Logan', 99);
+img = phantom('Modified Shepp-Logan', 128);
 [ML, minLevel, maxLevel, ~] = getMultilevel(img, [0, 1, 0, 1], size(img), 'fig', false);
 
 % Set directions for Radon transform.
@@ -73,7 +51,7 @@ theta = 0:10:179;
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
-    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta);
+    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta, 2^(-k + minLevel));
 end
 
 % Create measurements on finest level.

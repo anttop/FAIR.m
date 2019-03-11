@@ -137,11 +137,11 @@ if(plot)
     figure;
     colormap gray;
     subplot(2, 3, 1);
-    imagesc(image1);
+    imagesc(image1, [0, 255]);
     axis image;
     title('Template image');
     subplot(2, 3, 2);
-    imagesc(image2);
+    imagesc(image2, [0, 255]);
     axis image;
     title('Unknown image');
     subplot(2, 3, 3);
@@ -150,15 +150,15 @@ if(plot)
     title('Measurements');
     ylabel('Directions');
     subplot(2, 3, 4);
-    imagesc(rec1);
+    imagesc(rec1, [0, 255]);
     axis image;
     title('FBP reconstruction');
     subplot(2, 3, 5);
-    imagesc(rec2);
+    imagesc(rec2, [0, 255]);
     axis image;
     title('TV reconstruction');
     subplot(2, 3, 6);
-    imagesc(rec3);
+    imagesc(rec3, [0, 255]);
     axis image;
     title('TV reconstruction with template');
 end

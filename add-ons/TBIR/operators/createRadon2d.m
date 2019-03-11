@@ -14,13 +14,13 @@
 %
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
-function [K, Kadj, cleanup, ndet] = createRadon2d(m, theta)
+function [K, Kadj, cleanup, ndet] = createRadon2d(m, theta, scale)
 %RADON2D Creates function handles for 2D Radon transform using
 %ASTRA Toolbox.
 %
-%   [K, Kadj, cleanup, ndet] = RADON2D(m, theta) takes size of 2D
-%   geometry m, and angles of projections theta, and returns function 
-%   handles and the number of detectors.
+%   [K, Kadj, cleanup, ndet] = RADON2D(m, theta, scale) takes size of 2D
+%   geometry m, and angles of projections theta, and a scaling factor,
+%   and returns function handles and the number of detectors.
 %
 %   The setup uses parallel beam projections and the detector geometry is
 %   set up as [0, 1] and the number of detectors is
@@ -31,6 +31,7 @@ function [K, Kadj, cleanup, ndet] = createRadon2d(m, theta)
 % Input:
 %   m       size of 2D geometry, vector of length two.
 %   theta   angles of projections in degrees (0-180), vector of length k.
+%   scale   a scalar > 0.
 %   
 % Output:
 %   K       function handle, K maps a vector of length prod(m) to a matrix
@@ -42,13 +43,13 @@ function [K, Kadj, cleanup, ndet] = createRadon2d(m, theta)
 %   ndet    The number of detectors.
 
 % Set up detector size and geometries.
-ndet = ceil(hypot(m(1), m(2)));
+ndet = 1.5 * m(1);
 vol_geom = astra_create_vol_geom(m);
-proj_geom = astra_create_proj_geom('parallel', 1.0, ndet, theta * pi / 180);
+proj_geom = astra_create_proj_geom('parallel', 1.0, ndet, deg2rad(theta));
 
 % Create operator function handles.
-K = @(x) radon2d(reshape(x, m), proj_geom, vol_geom);
-Kadj = @(x) reshape(radon2dadj(x, proj_geom, vol_geom), [], 1);
+K = @(x) scale * radon2d(reshape(x, m), proj_geom, vol_geom);
+Kadj = @(x) reshape(radon2dadj(scale * x, proj_geom, vol_geom), [], 1);
 
 % Create cleanup function handle.
 cleanup = @() astra_cleanup(proj_geom, vol_geom);

@@ -21,17 +21,17 @@ end
 function operatorTest(testCase)
 
 % Set up test image and projection angles.
-x = phantom('Modified Shepp-Logan', 100);
+x = phantom('Modified Shepp-Logan', 128);
 m = size(x);
 theta = 0:10:179;
 
 % Create operators.
-[K, Kadj, cleanup, ndet] = createRadon2d(m, theta);
-verifyEqual(testCase, ndet, ceil(sqrt(2)*100));
+[K, Kadj, cleanup, ndet] = createRadon2d(m, theta, 1);
+verifyEqual(testCase, ndet, 1.5 * m(1));
 
 % Apply operator and check size.
 y = K(x(:));
-verifyEqual(testCase, size(y), [length(theta), ceil(sqrt(sum(m.^2)))]);
+verifyEqual(testCase, size(y), [length(theta), 1.5 * m(1)]);
 
 % Apply adjoint and check size.
 xrecon = Kadj(y);
@@ -45,14 +45,14 @@ end
 function adjointnessTest(testCase)
 
 % Set up random test data.
-x = rand(100, 150);
+x = rand(128, 128);
 m = size(x);
 theta = 0:10:179;
-y = rand(length(theta), ceil(sqrt(sum(m.^2))));
+y = rand(length(theta), 1.5 * m(1));
 
 % Create operators.
-[K, Kadj, cleanup, ndet] = createRadon2d(m, theta);
-verifyEqual(testCase, ndet, ceil(sqrt(sum(m.^2))));
+[K, Kadj, cleanup, ndet] = createRadon2d(m, theta, 1);
+verifyEqual(testCase, ndet, 1.5 * m(1));
 
 % Verify adjointness.
 Kx = K(x(:));

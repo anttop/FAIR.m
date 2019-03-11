@@ -82,6 +82,6 @@ if(doDerivative)
     dr = K;
     dradj = Kadj;
     dD = 2 * s * Kadj(-ip * y / snr + r * (ip / snr)^2)';
-    d2psi = 1;
+    d2psi = 2 * s / snr;
 end
 end

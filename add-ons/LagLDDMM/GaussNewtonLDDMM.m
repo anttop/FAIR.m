@@ -170,7 +170,7 @@ FAIRmessage([mfilename,' : done !']);
 %==============================================================================
 
 function [dy,iter,relres] = solveGN(rhs,H,solver)
-maxIterCG = 50; tolCG = 1e-1;
+maxIterCG = 150; tolCG = 1e-1;
 iter = -1; relres = 0.0;
 if isempty(solver)
   if isstruct(H),

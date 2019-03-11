@@ -40,13 +40,12 @@ function ML = multilevelRadon2d(ML, maxLevel, minLevel)
 
 for k=1:maxLevel - minLevel
     % Current level.
-    level = maxLevel-k;
+    level = maxLevel - k;
     
     % Select data from higher level.
     data = ML{level + 1}.R;
     
     % Resize data according to number of detectors.
-    [m, ~] = size(data);
-    ML{level}.R = imresize(data, [m, ML{level}.ndet], 'bilinear', 'Antialiasing', false) / 2;
+    ML{level}.R = (data(:, 1:2:end) + data(:, 2:2:end)) / 2;
 end
 end

@@ -31,7 +31,7 @@ gpuIdx = 0;
 
 % Create operators.
 [K, Kadj, cleanup, ndet] = createRadon3d(m, theta, gpuIdx);
-verifyEqual(testCase, ndet, [ceil(sqrt(sum(m(1:2).^2))), m(3)]);
+verifyEqual(testCase, ndet, [1.5 * m(1), m(3)]);
 
 try
     % Apply operator and check size.
@@ -64,7 +64,7 @@ gpuIdx = 0;
 
 % Create operators.
 [K, Kadj, cleanup, ndet] = createRadon3d(m, theta, gpuIdx);
-verifyEqual(testCase, ndet, [ceil(sqrt(sum(m(1:2).^2))), m(3)]);
+verifyEqual(testCase, ndet, [1.5 * m(1), m(3)]);
 
 try
     % Verify adjointness.

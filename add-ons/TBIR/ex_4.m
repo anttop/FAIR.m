@@ -32,12 +32,19 @@ outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_4');
 mkdir(outputfolder);
 
 % Name of dataset.
-name = 'Disk';
+name = 'circle';
+
+% Load images.
+path = fullfile(FAIRpath, 'add-ons', 'TBIR', 'data');
+file1 = 'circle-source.png';
+file2 = 'circle-target.png';
+image1 = double(imresize(imread(fullfile(path, file1)), [128, 128]));
+image2 = double(imresize(imread(fullfile(path, file2)), [128, 128]));
 
 % Create images having equal total mass.
-image1 = 255 * double(createdisk([128, 128], [60, 60], 12));
-image2 = double(createdisk([128, 128], [40, 40], 24));
-image2 = sum(image1(:)) * image2 / sum(image2(:));
+% image1 = 255 * double(createdisk([128, 128], [60, 60], 12));
+% image2 = double(createdisk([128, 128], [40, 40], 24));
+% image2 = sum(image1(:)) * image2 / sum(image2(:));
 
 % Save size of template.
 m = size(image1);
@@ -83,14 +90,17 @@ NPIRpara.maxIter = 30;
 NPIRpara.scheme = @GaussNewtonLDDMM;
 
 % Create multilevel versions of template.
-[ML, minLevel, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
+[ML, ~, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
+
+% Set starting level.
+minLevel = 5;
 
 % Set directions for Radon transform.
-theta = linspace(0, 90, 5);
+theta = mod(linspace(0, rad2deg(90), 5), 180);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
-    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta);
+    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta, 2^(-k + minLevel));
 end
 
 % Run algorithm for each setting.
@@ -104,10 +114,10 @@ if(exist(sinogramfile, 'file'))
 else
     % Apply operator on finest level to generate synthetic measurements.
     R = ML{maxLevel}.K(image2);
-    ML{maxLevel}.R = R;
 
     % Add noise to measurements.
-    ML{maxLevel}.R = addnoise(ML{maxLevel}.R, sigma);
+    R = addnoise(R, sigma);
+    ML{maxLevel}.R = R;
 
     % Save measurements.
     mkdir(fullfile(outputfolder, 'Sinograms'));
@@ -130,7 +140,7 @@ ML = multilevelRadon2d(ML, maxLevel, minLevel);
 objfun = 'LDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [20, 10, 1e-5];
+alpha = [20, 10, 1e-6];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...
@@ -160,7 +170,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec1, imag
 objfun = 'MPLDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [20, 10, 1e-5];
+alpha = [20, 10, 1e-6];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...

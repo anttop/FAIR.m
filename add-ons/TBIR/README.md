@@ -66,6 +66,7 @@ In order to work with the abovementioned version type:
 ## Usage
 
 % TODO: Add info that only matrix-free operators are supported at the moment.
+% TODO: Add info that only square geometries are supported at the moment.
 
 In order to use GPU support MATLAB may be required to be started with:
 
@@ -81,7 +82,7 @@ properly. Then simply run the startup scripts:
 
 To run the test cases execute
 
->> runtests('test')
+>> runtests('add-ons/TBIR/tests')
 
 % TODO: script runtests.sh
 % TODO: If no GPU available all tests will pass but 3D Radon tests will throw warnings.

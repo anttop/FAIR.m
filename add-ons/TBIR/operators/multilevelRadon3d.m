@@ -50,7 +50,8 @@ for k=1:maxLevel - minLevel
     newsize = [ML{level}.ndet(1), n, ML{level}.ndet(2)];
     ML{level}.R = zeros(newsize);
     for l=1:n
-        ML{level}.R(:, l, :) = imresize(squeeze(data(:, l, :)), [ML{level}.ndet(1), ML{level}.ndet(2)], 'bilinear', 'Antialiasing', false) / 2;
+        %ML{level}.R(:, l, :) = imresize(squeeze(data(:, l, :)), [ML{level}.ndet(1), ML{level}.ndet(2)], 'bilinear', 'Antialiasing', false) / 2;
+        ML{level}.R(:, l, :) = (data(1:2:end, l, 1:2:end) + data(2:2:end, l, 2:2:end)) / 2;
     end
 end
 end

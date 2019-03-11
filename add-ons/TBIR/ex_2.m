@@ -81,14 +81,17 @@ NPIRpara.maxIter = 30;
 NPIRpara.scheme = @GaussNewtonLDDMM;
 
 % Create multilevel versions of template.
-[ML, minLevel, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
+[ML, ~, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
+
+% Set starting level.
+minLevel = 5;
 
 % Set directions for Radon transform.
 theta = linspace(0, 75, 5);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
-    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta);
+    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta, 2^(-k + minLevel));
 end
 
 % Run algorithm for each setting.
@@ -102,10 +105,10 @@ if(exist(sinogramfile, 'file'))
 else
     % Apply operator on finest level to generate synthetic measurements.
     R = ML{maxLevel}.K(image2);
-    ML{maxLevel}.R = R;
 
     % Add noise to measurements.
-    ML{maxLevel}.R = addnoise(ML{maxLevel}.R, sigma);
+    R = addnoise(R, sigma);
+    ML{maxLevel}.R = R;
 
     % Save measurements.
     mkdir(fullfile(outputfolder, 'Sinograms'));

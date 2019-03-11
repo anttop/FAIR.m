@@ -70,8 +70,8 @@ sigma = {0.05, 0.05, 0.05,...
          0.05, 0.05, 0.05};
 
 % Set regularization parameters.
-alpha = {[20, 10, 1e-5], [20, 10], [200, 10],...
-         [20, 10, 1e-5], [20, 10], [200, 10]};
+alpha = {[20, 10, 1e-6], [200, 100], [500000, 1000],...
+         [100, 100, 1e-6], [1000, 10], [500000, 1000]};
 
 % Set Hessian shift.
 hessianShift = 1e-2;
@@ -95,14 +95,17 @@ NPIRpara.maxIter = 30;
 NPIRpara.scheme = @GaussNewtonLDDMM;
 
 % Create multilevel versions of template.
-[ML, minLevel, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
+[ML, ~, maxLevel, ~] = getMultilevel(image1, omega, m, 'fig', 0);
+
+% Set starting level.
+minLevel = 5;
 
 % Set directions for Radon transform.
 theta = linspace(0, 180, 10);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel
-    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta);
+    [ML{k}.K, ML{k}.Kadj, ML{k}.cleanup, ML{k}.ndet] = createRadon2d(size(ML{k}.T), theta, 2^(-k + minLevel));
 end
 
 % Run algorithm for each setting.
@@ -117,11 +120,11 @@ for k=1:length(alpha)
     else
         % Apply operator on finest level to generate synthetic measurements.
         R = ML{maxLevel}.K(image2);
-        ML{maxLevel}.R = R;
 
         % Add noise to measurements.
-        ML{maxLevel}.R = addnoise(ML{maxLevel}.R, sigma{k});
-        
+        R = addnoise(R, sigma{k});
+        ML{maxLevel}.R = R;
+
         % Save measurements.
         mkdir(fullfile(outputfolder, 'Sinograms'));
         save(sinogramfile, 'R', 'theta', 'm');

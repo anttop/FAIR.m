@@ -35,12 +35,14 @@ outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_5');
 mkdir(outputfolder);
 
 % Name of dataset.
-name = 'mice3D';
+name = 'phantom3D';
 
 % Load images and resize to power of two.
-D = load('mice3D', 'dataT', 'dataR');
-image1 = double(imresize3(D.dataT, [32, 32, 32], 'Method', 'linear', 'Antialiasing', false));
-image2 = double(imresize3(D.dataR, [32, 32, 32], 'Method', 'linear', 'Antialiasing', false));
+D = load('phantom3D', 'dataT', 'dataR');
+image1 = double(D.dataT);
+image2 = double(D.dataR);
+%image1 = double(imresize3(D.dataT, [32, 32, 32], 'Method', 'linear', 'Antialiasing', false));
+%image2 = double(imresize3(D.dataR, [32, 32, 32], 'Method', 'linear', 'Antialiasing', false));
 
 % Save size of template.
 m = size(image1);

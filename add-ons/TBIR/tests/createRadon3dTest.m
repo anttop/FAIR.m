@@ -36,7 +36,7 @@ verifyEqual(testCase, ndet, [1.5 * m(1), m(3)]);
 try
     % Apply operator and check size.
     y = K(data(:));
-    verifyEqual(testCase, size(y), [ceil(sqrt(sum(m(1:2).^2))), length(theta), m(3)]);
+    verifyEqual(testCase, size(y), [1.5 * m(1), length(theta), m(3)]);
 
     % Apply adjoint and check size.
     xrecon = Kadj(y);

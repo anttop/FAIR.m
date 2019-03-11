@@ -124,8 +124,8 @@ else
 end
 
 % Save template, unknown image, and measurements to results folder.
-imwrite(flatten3d(image1 / 255), fullfile(outputfolder, sprintf('%s_source.png', name)));
-imwrite(flatten3d(image2 / 255), fullfile(outputfolder, sprintf('%s_target.png', name)));
+imwrite(flatten3d(image1 / 255, 6), fullfile(outputfolder, sprintf('%s_source.png', name)));
+imwrite(flatten3d(image2 / 255, 6), fullfile(outputfolder, sprintf('%s_target.png', name)));
 %Rsize = size(ML{maxLevel}.R, 2);
 %Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
 %imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
@@ -170,11 +170,11 @@ if(plot)
     figure;
     colormap gray;
     subplot(2, 2, 1);
-    imagesc(flatten3d(image1));
+    imagesc(flatten3d(image1, 6));
     axis image;
     title('Template image');
     subplot(2, 2, 2);
-    imagesc(flatten3d(image2));
+    imagesc(flatten3d(image2, 6));
     axis image;
     title('Unknown image');
     subplot(2, 2, 3);
@@ -183,7 +183,7 @@ if(plot)
     title('Measurements');
     ylabel('Directions');
     subplot(2, 2, 4);
-    imagesc(flatten3d(rec));
+    imagesc(flatten3d(rec, 6));
     axis image;
     title('SSD, transport equation');
 end

@@ -46,5 +46,6 @@ fprintf(fid, sprintf('SSIM (ref.):\t %g\n', ssim(image1, image2)));
 fprintf(fid, sprintf('PSNR (recon.):\t %g\n', psnr(rec, image2)));
 fprintf(fid, sprintf('PSNR (ref.):\t %g\n', psnr(image1, image2)));
 fprintf(fid, sprintf('Elapsed time:\t %g s\n', elapsed));
+fclose(fid);
 
 end

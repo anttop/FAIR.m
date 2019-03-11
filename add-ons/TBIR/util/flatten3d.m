@@ -14,19 +14,19 @@
 %
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
-function y = flatten3d(x)
+function y = flatten3d(x, cols)
 %FLATTEN3D Takes a 3D array and returns a flattened 2D version.
 
 m = size(x);
 maxval = max(x(:));
 c = squeeze(mat2cell(x, m(1), m(2), ones(m(3), 1)));
-num = ceil(sqrt(m(3)));
+rows = ceil(m(3) / cols);
 
 % Pad missing images.
-for k=m(3)+1:num^2
+for k=m(3)+1:rows*cols
     c{k} = zeros(m(1:2));
 end
-c = reshape(c, num, num)';
+c = reshape(c, cols, rows)';
 
 % Add white frame.
 c = cellfun(@(x) padarray(x, [1, 1], maxval), c, 'UniformOutput', false);

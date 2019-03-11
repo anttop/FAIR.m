@@ -124,12 +124,13 @@ else
 end
 
 % Save template, unknown image, and measurements to results folder.
-imwrite(flatten3d(image1) / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
-imwrite(flatten3d(image2) / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
+imwrite(flatten3d(image1 / 255), fullfile(outputfolder, sprintf('%s_source.png', name)));
+imwrite(flatten3d(image2 / 255), fullfile(outputfolder, sprintf('%s_target.png', name)));
 %Rsize = size(ML{maxLevel}.R, 2);
 %Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
 %imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
-imwrite(ML{maxLevel}.R / max(ML{maxLevel}.R(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
+Rperm = permute(ML{maxLevel}.R, [1, 3, 2]);
+imwrite(flatten3d(Rperm / max(Rperm(:)), 6), fullfile(outputfolder, sprintf('%s_sino.png', name)));
 
 % Create multilevel versions of measurements.
 ML = multilevelRadon3d(ML, maxLevel, minLevel);
@@ -152,9 +153,9 @@ rec = reshape(rec, m);
 fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec, image2));
 
 % Save result.
-[resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
-    ML{maxLevel}.R, rec, dist, reg, objfun, imageModel, N, nt,...
-    alpha, theta, sigma, his.time);
+[resfile, paramfile] = saveresults(name, outputfolder, flatten3d(image1, 6),...
+    flatten3d(image2, 6), flatten3d(ML{maxLevel}.R, 6), flatten3d(rec, 6), dist,...
+    reg, objfun, imageModel, N, nt, alpha, theta, sigma, his.time);
 
 %% Cleanup and show results.
 

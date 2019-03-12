@@ -105,7 +105,7 @@ imgModel('reset', 'imgModel', imageModel);
 trafo('reset', 'trafo', 'affine2D');
 viewImage('reset', 'viewImage', 'viewImage2D', 'colormap', gray(256));
 NPIRpara = optPara('NPIR-GN');
-NPIRpara.maxIter = 30;
+NPIRpara.maxIter = 50;
 NPIRpara.scheme = @GaussNewtonLDDMM;
 
 % Create multilevel versions of template.

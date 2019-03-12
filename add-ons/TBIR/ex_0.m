@@ -15,7 +15,7 @@
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 %
-% This script is just a test and uses the identity operator.
+% This script is just a test that uses the identity as operator.
 % Results are saved to the folder 'results'. When run for the first time,
 % measurements are created and also saved to the results
 % folder. In every subsequent run these measurements are used again. Make
@@ -25,7 +25,7 @@ close all;
 clc;
 
 % Flag that activates plotting.
-plot = true;
+plot = false;
 
 % Set results output folder.
 outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_0');
@@ -64,7 +64,7 @@ imageModel = 'splineInterMex';
 nt = 1;
 
 % Define noise level.
-sigma = 0;
+sigma = 0.05;
 
 % Set regularization parameters.
 alpha = [5, 10];

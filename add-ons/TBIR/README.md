@@ -87,9 +87,17 @@ To run the test cases execute
 % TODO: script runtests.sh
 % TODO: If no GPU available all tests will pass but 3D Radon tests will throw warnings.
 
-The figures in the paper were created with the following scripts:
+The figures in the paper were created using the example scripts. To run all
+these examples you can use:
 
-- paperfigures.m
+>> sh runexamples.sh
+
+Examples 6-8 require data to be downloaded beforehand (see the scripts).
+You can also use the script
+
+>> downloaddata.sh
+
+to download the data. Make sure to run this script in the folder TBIR!
 
 ## Acknowledgements
 
@@ -99,3 +107,5 @@ donation of the Quadro P6000 GPU used for this research.
 The artificial brain phantom is taken from:
 
     M. Guerquin-Kern, L. Lejeune, K. P. Pruessmann, and M. Unser. Realistic Analytical Phantoms for Parallel Magnetic Resonance Imaging, IEEE Transactions on Medical Imaging, vol. 31, no. 3, pp. 626-636, March 2012.
+
+% TODO: Add acknowledgements for datasets.

@@ -162,7 +162,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec1, imag
 % Save result.
 [resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
     ML{maxLevel}.R, rec1, dist, reg, objfun, imageModel, N, nt,...
-    alpha, theta, sigma, his.time);
+    alpha, theta, sigma, his.time, false);
 
 %% NCC + continuity equation example.
 

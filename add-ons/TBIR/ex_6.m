@@ -85,7 +85,7 @@ imageModel = 'splineInterMex';
 nt = 1;
 
 % Define noise level.
-sigma = 0.05;
+sigma = 0;
 
 % Set Hessian shift.
 hessianShift = 1e-2;
@@ -135,7 +135,7 @@ imwrite(uint8(255 * image1 / max(image1(:))), fullfile(outputfolder, sprintf('%s
 imwrite(uint8(255 * image2 / max(image2(:))), fullfile(outputfolder, sprintf('%s_target.png', name)));
 Rsize = size(ML{maxLevel}.R, 2);
 Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
-imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
+imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino_%.2f.png', name, sigma)));
 
 % Create multilevel versions of measurements.
 ML = multilevelRadon2d_imresize(ML, maxLevel, minLevel);

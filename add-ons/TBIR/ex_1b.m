@@ -138,7 +138,7 @@ for k=idx
     imwrite(image2 / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
     Rsize = size(ML{maxLevel}.R, 2);
     Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
-    imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
+    imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino_%.2f.png', name, sigma{k})));
     
     % Create multilevel versions of measurements.
     ML = multilevelRadon2d(ML, maxLevel, minLevel);

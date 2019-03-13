@@ -126,11 +126,8 @@ end
 % Save template, unknown image, and measurements to results folder.
 imwrite(flatten3d(image1 / 255, 6), fullfile(outputfolder, sprintf('%s_source.png', name)));
 imwrite(flatten3d(image2 / 255, 6), fullfile(outputfolder, sprintf('%s_target.png', name)));
-%Rsize = size(ML{maxLevel}.R, 2);
-%Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
-%imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));
 Rperm = permute(ML{maxLevel}.R, [1, 3, 2]);
-imwrite(flatten3d(Rperm / max(Rperm(:)), 6), fullfile(outputfolder, sprintf('%s_sino.png', name)));
+imwrite(flatten3d(Rperm / max(Rperm(:)), 6), fullfile(outputfolder, sprintf('%s_sino_%.2f.png', name, sigma)));
 
 % Create multilevel versions of measurements.
 ML = multilevelRadon3d(ML, maxLevel, minLevel);

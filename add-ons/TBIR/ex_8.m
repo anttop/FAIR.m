@@ -134,8 +134,8 @@ mV = @(m) ceil(1*m);
 ML{maxLevel}.R = permute(slice, [2, 1]);
 
 % Save template, unknown image, and measurements to results folder.
-imwrite(image1 / 255, fullfile(outputfolder, sprintf('%s_source.png', name)));
-imwrite(image2 / 255, fullfile(outputfolder, sprintf('%s_target.png', name)));
+imwrite(uint8(255 * image1 / max(image1(:))), fullfile(outputfolder, sprintf('%s_source.png', name)));
+imwrite(uint8(255 * image2 / max(image2(:))), fullfile(outputfolder, sprintf('%s_target.png', name)));
 Rsize = size(ML{maxLevel}.R, 2);
 Rsq = imresize(ML{maxLevel}.R, [Rsize, Rsize], 'nearest');
 imwrite(Rsq / max(Rsq(:)), fullfile(outputfolder, sprintf('%s_sino.png', name)));

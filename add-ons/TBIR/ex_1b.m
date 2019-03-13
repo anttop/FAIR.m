@@ -103,7 +103,7 @@ NPIRpara.scheme = @GaussNewtonLDDMM;
 minLevel = 5;
 
 % Set directions for Radon transform.
-theta = mod(linspace(0, rad2deg(60), 6), 180);
+theta = linspace(0, 60, 6);
 
 % Set up operators for all levels.
 for k=minLevel:maxLevel

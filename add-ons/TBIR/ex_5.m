@@ -155,7 +155,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec, image
 % Save result.
 [resfile, paramfile] = saveresults(name, outputfolder, flatten3d(image1, 6),...
     flatten3d(image2, 6), flatten3d(ML{maxLevel}.R, 6), flatten3d(rec, 6), dist,...
-    reg, objfun, imageModel, N, nt, alpha, theta, sigma, his.time);
+    reg, objfun, imageModel, N, nt, alpha, theta, sigma, his.time, true);
 
 %% Cleanup and show results.
 

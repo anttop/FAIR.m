@@ -163,7 +163,7 @@ for k=idx
     % Save result.
     [resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
         ML{maxLevel}.R, rec{k}, dist, reg{k}, objfun, imageModel, N, nt,...
-        alpha{k}, theta, sigma{k}, his.time);
+        alpha{k}, theta, sigma{k}, his.time, true);
 end
 
 % Free resources.

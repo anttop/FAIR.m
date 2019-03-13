@@ -169,7 +169,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec, image
 % Save result.
 [resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
     ML{maxLevel}.R, rec, dist, reg, objfun, imageModel, N, nt,...
-    alpha, theta, sigma, his.time);
+    alpha, theta, sigma, his.time, true);
 
 % Free resources.
 for k=minLevel:maxLevel

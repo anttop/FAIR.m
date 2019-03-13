@@ -225,7 +225,7 @@ fprintf('Elapsed time is: %.2f seconds, SSIM=%.3f.\n', his.time, ssim(rec3, imag
 % Save result.
 [resfile, paramfile] = saveresults(name, outputfolder, image1, image2,...
     ML{maxLevel}.R, rec3, dist, reg, objfun, imageModel, N, nt,...
-    alpha, theta, sigma, his.time);
+    alpha, theta, sigma, his.time, true);
 
 %% Cleanup and show results.
 

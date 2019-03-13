@@ -16,7 +16,7 @@
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 function [resfile, paramfile] = saveresults(name, outputfolder, image1,...
     image2, ~, rec, dist, reg, objfun, imageModel, N, nt, alpha, theta,...
-    sigma, elapsed)
+    sigma, elapsed, scaleimg)
 %SAVERESULTS A script that saves results and parameters.
 
 % Create string for result filename.
@@ -26,7 +26,11 @@ str = sprintf('%s_params_%s_%s_%s_%.2f', name, dist, reg, objfun, sigma);
 paramfile = fullfile(outputfolder, sprintf('%s.txt', str));
 
 % Save result.
-imwrite(uint8(255 * rec / max(rec(:))), resfile);
+if(scaleimg)
+    imwrite(uint8(255 * rec / max(rec(:))), resfile);
+else
+    imwrite(uint8(rec), resfile);
+end
 
 % Save parameters.
 fid = fopen(paramfile, 'wt+');

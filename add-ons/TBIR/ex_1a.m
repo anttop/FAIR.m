@@ -44,7 +44,7 @@ plot = false;
 addpath(genpath(fullfile(FAIRpath, '../', 'matlab-toolboxes', 'toolbox_optim')));
 
 % Set results output folder.
-outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_1');
+outputfolder = fullfile(FAIRpath, 'add-ons', 'TBIR', 'results', 'ex_1a');
 mkdir(outputfolder);
 
 % Name of dataset.

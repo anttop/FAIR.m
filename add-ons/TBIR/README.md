@@ -4,9 +4,9 @@
 
 This code implements indirect image registration based on [LagLDDMM](https://github.com/C4IR/FAIR.m/tree/master/add-ons/LagLDDMM).
 
-![Template image](/images/Brain_source.png)
-![Unknown image](/images/Brain_target.png)
-![Measurements](/images/Brain_sino.png)
+![Template image](/add-ons/TBIR/images/Brain_source.png)
+![Unknown image](/add-ons/TBIR/images/Brain_target.png)
+![Measurements](/add-ons/TBIR/images/Brain_sino.png)
 
 It is an extension to [FAIR](https://github.com/C4IR/FAIR.m) as described in:
 

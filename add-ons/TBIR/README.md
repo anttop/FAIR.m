@@ -110,21 +110,21 @@ Version used: ae0b510 <br />
 
 Results can be reproduced by 
 
-1. Get and install Anaconda from https://www.anaconda.com/.
+Get and install Anaconda from https://www.anaconda.com/.
 
-2. Create environment  
+Create environment  
 
     conda create -c odlgroup -n odl-py35 python=3.5 odl matplotlib pytest scikit-image spyder
 
-2. Activate environment
+Activate environment
 
     source activate odl-py35
 
-3. Install ASTRA toolbox
+Install ASTRA toolbox
 
     conda install -c astra-toolbox astra-toolbox
 
-4. Clone IndirectMatchingMetamorphosis implementation to some location
+Clone IndirectMatchingMetamorphosis implementation to some location
 
     git clone https://github.com/bgris/IndirectMatchingMetamorphosis.git
 
@@ -133,7 +133,7 @@ In order to work with the abovementioned version type:
     cd IndirectMatchingMetamorphosis
     git checkout ae0b510
 
-5. Place the files
+Place the files
 
 * metamorphosis_brain.py
 * data/brain-T.png
@@ -142,7 +142,7 @@ In order to work with the abovementioned version type:
 in the directory 'IndirectMatchingMetamorphosis' and adjust the path in
 metamorphosis_brain.py.
 
-6. Resize images to 128 times 128 pixels and run
+Resize images to 128 times 128 pixels and run
 
     python3 metamorphosis_brain.py
 

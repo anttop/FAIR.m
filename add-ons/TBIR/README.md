@@ -4,10 +4,6 @@
 
 This code implements indirect image registration based on [LagLDDMM](https://github.com/C4IR/FAIR.m/tree/master/add-ons/LagLDDMM).
 
-![Template image](/add-ons/TBIR/images/Brain_source.png)
-![Unknown image](/add-ons/TBIR/images/Brain_target.png)
-![Measurements](/add-ons/TBIR/images/Brain_sino.png)
-
 It is an extension to [FAIR](https://github.com/C4IR/FAIR.m) as described in:
 
     Lukas F. Lang, Sebastian Neumayer, Ozan Öktem, Carola-Bibiane Schönlieb. Template-Based Image Reconstruction from Sparse Tomographic Data, 2018.
@@ -140,13 +136,13 @@ In order to work with the abovementioned version type:
 5. Place the files
 
 * metamorphosis_brain.py
-* images/Brain_source.png
-* images/Brain_target.png
+* data/brain-T.png
+* data/brain-R.png
 
 in the directory 'IndirectMatchingMetamorphosis' and adjust the path in
 metamorphosis_brain.py.
 
-1. Run
+6. Resize images to 128 times 128 pixels and run
 
     python3 metamorphosis_brain.py
 

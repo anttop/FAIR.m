@@ -4,6 +4,10 @@
 
 This code implements indirect image registration based on [LagLDDMM](https://github.com/C4IR/FAIR.m/tree/master/add-ons/LagLDDMM).
 
+![Template image](/images/Brain_source.png)
+![Unknown image](/images/Brain_target.png)
+![Measurements](/images/Brain_sino.png)
+
 It is an extension to [FAIR](https://github.com/C4IR/FAIR.m) as described in:
 
     Lukas F. Lang, Sebastian Neumayer, Ozan Öktem, Carola-Bibiane Schönlieb. Template-Based Image Reconstruction from Sparse Tomographic Data, 2018.
@@ -103,25 +107,28 @@ Alternatively, run
 
 to download the data to the folder 'data'.
 
-In order to reproduce the results for the metamorphosis approach
+To reproduce the results for the metamorphosis approach the following code is required:
 
 GitHub: https://github.com/bgris/IndirectMatchingMetamorphosis <br />
 Version used: ae0b510 <br />
 
+Results can be reproduced by 
+
 1. Get and install Anaconda from https://www.anaconda.com/.
-1. Create environment  
+
+2. Create environment  
 
     conda create -c odlgroup -n odl-py35 python=3.5 odl matplotlib pytest scikit-image spyder
 
-1. Activate environment
+2. Activate environment
 
     source activate odl-py35
 
-1. Install ASTRA toolbox
+3. Install ASTRA toolbox
 
     conda install -c astra-toolbox astra-toolbox
 
-1. Clone IndirectMatchingMetamorphosis implementation to some location
+4. Clone IndirectMatchingMetamorphosis implementation to some location
 
     git clone https://github.com/bgris/IndirectMatchingMetamorphosis.git
 
@@ -130,11 +137,11 @@ In order to work with the abovementioned version type:
     cd IndirectMatchingMetamorphosis
     git checkout ae0b510
 
-1. Place the files
+5. Place the files
 
 * metamorphosis_brain.py
-* data/brain-R.png
-* data/brain-T.png
+* images/Brain_source.png
+* images/Brain_target.png
 
 in the directory 'IndirectMatchingMetamorphosis' and adjust the path in
 metamorphosis_brain.py.

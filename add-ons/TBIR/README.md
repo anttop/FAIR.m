@@ -4,13 +4,13 @@
 
 This code implements indirect image registration based on [LagLDDMM](https://github.com/C4IR/FAIR.m/tree/master/add-ons/LagLDDMM).
 
-This is a MATLAB implementation of the approach described in:
+It is an extension to [FAIR](https://github.com/C4IR/FAIR.m) as described in:
 
     Lukas F. Lang, Sebastian Neumayer, Ozan Öktem, Carola-Bibiane Schönlieb. Template-Based Image Reconstruction from Sparse Tomographic Data, 2018.
 
-If you use this software in your work please cite the abovementioned paper in any resulting publication.
+See https://arxiv.org/abs/1810.08596 for the preprint.
 
-BibTeX:
+If you use this software in your work please cite the abovementioned paper in any resulting publication:
 
     @techreport{LanNeuOktScho18_report,
       author     = {Lang, L.~F. and Neumayer, S. and Öktem, O. and Schönlieb, C.-B.},
@@ -21,8 +21,6 @@ BibTeX:
       url        = {https://arxiv.org/abs/1810.08596},
       year       = {2018}
     }
-
-See https://arxiv.org/abs/1810.08596 for the preprint.
 
 ## License & Disclaimer
 
@@ -45,67 +43,111 @@ For the full license statement see the file LICENSE.
 
 ## Requirements
 
-This software was originally written for and tested with MATLAB R2017b.
+This software was originally written for and tested with MATLAB 2017b.
 
-The following libraries are required:
+The following additional libraries are required:
 
-astra-toolbox: Matrix-free implementation of the Radon transform.
-GitHub: https://github.com/astra-toolbox/astra-toolbox
-URL: https://www.astra-toolbox.com/
-Version used: 3d07f5b
+astra-toolbox: Matrix-free implementation of the Radon transform. <br />
+GitHub: https://github.com/astra-toolbox/astra-toolbox <br />
+URL: https://www.astra-toolbox.com/ <br />
+Version used: 3d07f5b <br />
 
->> git clone https://github.com/astra-toolbox/astra-toolbox.git
+In order to compile it clone the library with
+
+    git clone https://github.com/astra-toolbox/astra-toolbox.git
 
 In order to work with the abovementioned version type:
 
->> cd astra-toolbox
->> git checkout 3d07f5b
+    cd astra-toolbox
+    git checkout 3d07f5b
 
-% TODO: Add information reg. compiling astra-toolbox, setting up path, GPU, etc.
+See https://www.astra-toolbox.com/docs/install.html#for-matlab for instructions.
 
 ## Usage
 
-% TODO: Add info that only matrix-free operators are supported at the moment.
-% TODO: Add info that only square geometries are supported at the moment.
+At the moment, only matrix-free operators are supported by this extension.
+Moreover, the implementation is restricted to square/cubic geometries.
 
-In order to use GPU support MATLAB may be required to be started with:
+In order to use GPU support, MATLAB may be required to be started with:
 
->> LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 \
-LD_LIBRARY_PATH=/home/ll542/store/git/astra/lib \
-matlab-r2017b
+    LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 \
+    LD_LIBRARY_PATH=/home/ll542/store/git/astra/lib \
+    matlab-r2017b
 
-Make sure to download ASTRA Toolbox and to set the path in TBIRstartup.m 
-properly. Then simply run the startup scripts:
+To run the code set the path in TBIRstartup.m to where the ASTRA library is located.
+Then simply run the startup scripts:
 
->> run('FAIRstartup.m')
->> run('TBIRstartup.m')
+    run('FAIRstartup.m')
+    run('TBIRstartup.m')
 
-To run the test cases execute
+To run the test cases, execute
 
->> runtests('add-ons/TBIR/tests')
+    runtests('add-ons/TBIR/tests')
 
-% TODO: script runtests.sh
-% TODO: If no GPU available all tests will pass but 3D Radon tests will throw warnings.
+We also provide a script: 
 
-The figures in the paper were created using the example scripts. To run all
-these examples you can use:
+    sh runtests.sh
 
->> sh runexamples.sh
+If no GPU is available all tests will pass but 3D Radon tests will throw warnings.
 
-Examples 6-8 require data to be downloaded beforehand (see the scripts).
-You can also use the script
+The figures in the paper were created using the example scripts.
+To run all these examples you can use:
 
->> downloaddata.sh
+    sh runexamples.sh
 
-to download the data. Make sure to run this script in the folder TBIR!
+Examples 6-8 require X-ray tomography data to be downloaded beforehand (see the scripts).
+Alternatively, run
+
+    cd add-ons/TBIR/
+    downloaddata.sh
+
+to download the data to the folder 'data'.
+
+In order to reproduce the results for the metamorphosis approach
+
+GitHub: https://github.com/bgris/IndirectMatchingMetamorphosis <br />
+Version used: ae0b510 <br />
+
+1. Get and install Anaconda from https://www.anaconda.com/.
+1. Create environment  
+
+    conda create -c odlgroup -n odl-py35 python=3.5 odl matplotlib pytest scikit-image spyder
+
+1. Activate environment
+
+    source activate odl-py35
+
+1. Install ASTRA toolbox
+
+    conda install -c astra-toolbox astra-toolbox
+
+1. Clone IndirectMatchingMetamorphosis implementation to some location
+
+    git clone https://github.com/bgris/IndirectMatchingMetamorphosis.git
+
+In order to work with the abovementioned version type:
+
+    cd IndirectMatchingMetamorphosis
+    git checkout ae0b510
+
+1. Place the files
+
+* metamorphosis_brain.py
+* data/brain-R.png
+* data/brain-T.png
+
+in the directory 'IndirectMatchingMetamorphosis' and adjust the path in
+metamorphosis_brain.py.
+
+1. Run
+
+    python3 metamorphosis_brain.py
+
+Results can then be found in the 'results' folder.
 
 ## Acknowledgements
 
-We gratefully acknowledge the support of NVIDIA Corporation with the
-donation of the Quadro P6000 GPU used for this research.
-
-The artificial brain phantom is taken from:
-
-    M. Guerquin-Kern, L. Lejeune, K. P. Pruessmann, and M. Unser. Realistic Analytical Phantoms for Parallel Magnetic Resonance Imaging, IEEE Transactions on Medical Imaging, vol. 31, no. 3, pp. 626-636, March 2012.
-
-% TODO: Add acknowledgements for datasets.
+Lukas F. Lang and Carola-Bibiane Schönlieb acknowledge support from the Leverhulme Trust project "Breaking the non-convexity barrier", the EPSRC grant EP/M00483X/1, the EPSRC Centre Nr.\ EP/N014588/1, the RISE projects ChiPS and NoMADS, the Cantab Capital Institute for the Mathematics of Information, and the Alan Turing Institute.
+Sebastian Neumayer is funded by the German Research Foundation (DFG) within the Research Training  Group  1932,  project  area  P3.
+Ozan Öktem is supported by the Swedish Foundation of Strategic Research, grant AM13-0049.
+We gratefully acknowledge the support of NVIDIA Corporation with the donation of the Quadro P6000 GPU used for this research.

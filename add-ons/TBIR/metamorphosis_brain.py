@@ -20,7 +20,7 @@ This file is part of TBIR.
 
 This script reproduces the result obtained by the approach in:
 
-Gris, B. and Chong, C. and Öktem, O.: Image reconstruction through metamorphosis, 2018.
+Gris, B. and Chong, C. and Oektem, O.: Image reconstruction through metamorphosis, 2018.
 URL: https://arxiv.org/abs/1806.01225
 Code: https://github.com/bgris/IndirectMatchingMetamorphosis
 

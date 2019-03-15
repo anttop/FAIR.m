@@ -16,7 +16,6 @@ If you use this software in your work please cite the abovementioned paper in an
       author     = {Lang, L.~F. and Neumayer, S. and Öktem, O. and Schönlieb, C.-B.},
       title      = {Template-Based Image Reconstruction from Sparse Tomographic Data},
       number     = {arXiv:1810.08596},
-      numpages   = {26},
       type       = {Preprint on ArXiv},
       url        = {https://arxiv.org/abs/1810.08596},
       year       = {2018}
@@ -52,23 +51,25 @@ GitHub: https://github.com/astra-toolbox/astra-toolbox <br />
 URL: https://www.astra-toolbox.com/ <br />
 Version used: 3d07f5b <br />
 
-In order to compile it clone the library with
+See https://www.astra-toolbox.com/docs/install.html#for-matlab for instructions.
+
+Either download a pre-compiled version or compile ASTRA by cloning the repository with:
 
     git clone https://github.com/astra-toolbox/astra-toolbox.git
 
-In order to work with the abovementioned version type:
+To work with the abovementioned version type:
 
     cd astra-toolbox
     git checkout 3d07f5b
 
-See https://www.astra-toolbox.com/docs/install.html#for-matlab for instructions.
+Then follow the instructions for compiling ASTRA on your system.
 
 ## Usage
 
 At the moment, only matrix-free operators are supported by this extension.
 Moreover, the implementation is restricted to square/cubic geometries.
 
-In order to use GPU support, MATLAB may be required to be started with:
+In order to use GPU support required for the 3D Radon transform, MATLAB may be required to be started with:
 
     LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 \
     LD_LIBRARY_PATH=/home/ll542/store/git/astra/lib \
@@ -77,18 +78,18 @@ In order to use GPU support, MATLAB may be required to be started with:
 To run the code set the path in TBIRstartup.m to where the ASTRA library is located.
 Then simply run the startup scripts:
 
-    run('FAIRstartup.m')
-    run('TBIRstartup.m')
+    run('FAIRstartup.m');
+    run('TBIRstartup.m');
 
 To run the test cases, execute
 
-    runtests('add-ons/TBIR/tests')
+    runtests('add-ons/TBIR/tests');
 
 We also provide a script: 
 
     sh runtests.sh
 
-If no GPU is available all tests will pass but 3D Radon tests will throw warnings.
+If no GPU is available all tests will pass but the 3D Radon transform tests will issue warnings.
 
 The figures in the paper were created using the example scripts.
 To run all these examples you can use:
@@ -101,30 +102,28 @@ Alternatively, run
     cd add-ons/TBIR/
     downloaddata.sh
 
-to download the data to the folder 'data'.
+to download the required data to the folder 'data'.
 
 To reproduce the results for the metamorphosis approach the following code is required:
 
 GitHub: https://github.com/bgris/IndirectMatchingMetamorphosis <br />
 Version used: ae0b510 <br />
 
-Results can be reproduced by 
-
 Get and install Anaconda from https://www.anaconda.com/.
 
-Create environment  
+Then, create an environment:
 
     conda create -c odlgroup -n odl-py35 python=3.5 odl matplotlib pytest scikit-image spyder
 
-Activate environment
+Activate environment:
 
     source activate odl-py35
 
-Install ASTRA toolbox
+Install ASTRA toolbox:
 
     conda install -c astra-toolbox astra-toolbox
 
-Clone IndirectMatchingMetamorphosis implementation to some location
+Clone the IndirectMatchingMetamorphosis implementation to some location:
 
     git clone https://github.com/bgris/IndirectMatchingMetamorphosis.git
 
@@ -142,11 +141,13 @@ Place the files
 in the directory 'IndirectMatchingMetamorphosis' and adjust the path in
 metamorphosis_brain.py.
 
-Resize images to 128 times 128 pixels and run
+Finally, run
 
     python3 metamorphosis_brain.py
 
 Results can then be found in the 'results' folder.
+
+In our experiments we first resized these images 128 times 128 pixels as in the other examples.
 
 ## Acknowledgements
 

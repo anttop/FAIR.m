@@ -15,7 +15,7 @@
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 %
-% This script creates the results shown in Figure 6.
+% This script creates the results shown in Figure 7.
 % Results are saved to the folder 'results'. When run for the first time,
 % measurements (sinograms) are created and also saved to the results
 % folder. In every subsequent run these measurements are used again. Make

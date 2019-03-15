@@ -22,7 +22,7 @@
 %
 % Download and place the following files in the folder 'data':
 %
-%   - Data164.mat
+%   - Data328.mat
 %
 clear;
 close all;
@@ -39,33 +39,32 @@ mkdir(outputfolder);
 name = 'walnut';
 
 % Load measurements.
-D = load('Data164.mat');
+D = load('Data328.mat');
 sinogram = D.m;
 
 % Reconstruct image using FBP as ground truth.
-D = 164 * 11 / 11.48;
+D = 328 * 11 / 11.48;
 FSS = 11 / 30;
-G = 164 * (30 - 11) / 11.48;
+G = 328 * (30 - 11) / 11.48;
 image2 = ifanbeam(sinogram, D,...
     'FanRotationIncrement', 1,...
     'FanSensorGeometry', 'line',...
     'FanSensorSpacing', FSS,...
-    'OutputSize', 64);
+    'OutputSize', 128);
 
 % Save size of template.
 m = size(image2);
 
 % Introduce a deformation to the template.
 [X, Y] = ndgrid(1:m(1), 1:m(2));
-sigma = 5;
-c = [15, 35];
+sigma = 10;
+c = [40, 80];
 K = exp(-((X - c(1)).^2 + (Y - c(2)).^2) / (2 * sigma^2));
 sigma = 10;
-c = [50, 20];
+c = [100, 40];
 L = exp(-((X - c(1)).^2 + (Y - c(2)).^2) / (2 * sigma^2));
-v = 7.5 * cat(3, 0 * K, -1 * K) + 5 * cat(3, 0 * L, 1 * L);
+v = 15 * cat(3, 0 * K, -1 * K) + 12 * cat(3, 0 * L, 1 * L);
 image1 = imwarp(image2, v, 'SmoothEdges', true);
-
 % Set bumber of Runge-Kutta steps.
 N = 5;
 
@@ -73,7 +72,7 @@ N = 5;
 dist = 'NCC_op';
 
 % Define regularization term.
-reg = 'mfDiffusionST';
+reg = 'mfCurvatureST';
 
 % Define image model.
 imageModel = 'splineInterMex';
@@ -114,8 +113,8 @@ minLevel = maxLevel - 2;
 
 % Subsample and set directions for Radon transform.
 theta = linspace(1, 360, size(sinogram, 2));
-sinogram = sinogram(:, 1:10:end);
-theta = theta(1:10:end);
+sinogram = sinogram(:, 1:20:end);
+theta = theta(1:20:end);
 
 % Set up operators for all levels.
 ndet = size(sinogram, 1);
@@ -143,7 +142,7 @@ ML = multilevelRadon2d_imresize(ML, maxLevel, minLevel);
 objfun = 'LDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [5000, 100];
+alpha = [50, 10];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...

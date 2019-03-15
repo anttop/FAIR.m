@@ -32,7 +32,7 @@
 % >> cd matlab-toolboxes
 % >> git checkout 0cd622c
 %
-% This script creates the results shown in Figure 1.
+% This script creates the results shown in Figure 2.
 clear;
 close all;
 clc;

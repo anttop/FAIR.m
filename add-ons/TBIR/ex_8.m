@@ -15,7 +15,7 @@
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 %
-% This script creates the results shown in Figure 9.
+% This script creates results for dynamic data.
 % This script requires data from https://www.fips.fi/dataset.php
 %
 % Dataset available at https://doi.org/10.5281/zenodo.1183532 (Version 1)

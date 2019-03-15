@@ -161,7 +161,4 @@ for i in range(nb_time_point_int + 1):
     tmp = np.array(deformation_evo[i])
     tmp = np.uint8(255*(tmp - np.min(tmp))/np.ptp(tmp))
     imageio.imwrite(path_result + '/DeformationPart_t_' + str(i) + '.png', tmp)
-    tmp = np.array(zeta_transp[i])
-    tmp = np.uint8(255*(tmp - np.min(tmp))/np.ptp(tmp))
-    imageio.imwrite(path_result + '/SourcePart_t_' + str(i) + '.png', tmp)
 #

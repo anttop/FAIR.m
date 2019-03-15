@@ -15,7 +15,7 @@
 %    You should have received a copy of the GNU General Public License
 %    along with TBIR.  If not, see <http://www.gnu.org/licenses/>.
 %
-% This script creates the results shown in Figure 7.
+% This script creates the results shown in Figure 8.
 % This script requires data from https://www.fips.fi/dataset.php
 %
 % Dataset available at https://doi.org/10.5281/zenodo.1254204 (Version 1.0.0)
@@ -75,7 +75,7 @@ N = 5;
 dist = 'NCC_op';
 
 % Define regularization term.
-reg = 'mfDiffusionST';
+reg = 'mfCurvatureST';
 
 % Define image model.
 imageModel = 'splineInterMex';
@@ -115,8 +115,8 @@ NPIRpara.scheme = @GaussNewtonLDDMM;
 minLevel = maxLevel - 2;
 
 % Subsample and set directions for Radon transform.
-sinogram = sinogram(:, 1:10:end);
-theta = 1:10:360;
+sinogram = sinogram(:, 1:30:end);
+theta = 1:30:360;
 
 % Set up operators for all levels.
 ndet = size(sinogram, 1);
@@ -144,7 +144,7 @@ ML = multilevelRadon2d_imresize(ML, maxLevel, minLevel);
 objfun = 'LDDMMobjFctn';
 
 % Set regularization parameters.
-alpha = [5000, 100];
+alpha = [100, 10];
 
 % Run indirect registration.
 regularizer('reset', 'regularizer', reg, 'nt', nt,...

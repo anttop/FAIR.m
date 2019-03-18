@@ -112,9 +112,8 @@ NPIRpara.scheme = @GaussNewtonLDDMM;
 minLevel = maxLevel - 2;
 
 % Subsample and set directions for Radon transform.
-theta = linspace(1, 360, size(sinogram, 2));
-sinogram = sinogram(:, 1:20:end);
-theta = theta(1:20:end);
+sinogram = sinogram(:, 1:10:60);
+theta = 1:30:180;
 
 % Set up operators for all levels.
 ndet = size(sinogram, 1);

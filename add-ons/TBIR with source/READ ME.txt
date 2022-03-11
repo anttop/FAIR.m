@@ -1,0 +1,37 @@
+Template-based image reconstruction with source term
+
+This is the supplementary material for the paper 'Template based image reconstruction facing different topologies'
+
+@article{neumayer2021template,
+  title={Template based image reconstruction facing different topologies},
+  author={Neumayer, Sebastian and Topalovic, Antonia},
+  journal={arXiv preprint arXiv:2108.13777},
+  year={2021}
+}
+
+
+In order to  execute the files correctly the following toolboxes are needed:
+1) FAIR-toolbox with TBIR and LagLDDMM add-on 
+which can be downloaded via
+GitHub: https://github.com/lukaslang/FAIR.m/tree/v1.1
+
+If your're using a windows distrubution, the mentioned version might be missing some mex files. Those can found here:
+https://github.com/C4IR/FAIR.m/pull/9
+
+2) toolbox_optim from www.numerical-tours.com.
+GitHub: https://github.com/gpeyre/matlab-toolboxes
+
+Follow the instructions from the TBIR-READ ME file and move this folder to FAIR\add-ons.
+
+You can find the scripts, which produced the results in the paper in scripts/Third order. 
+We also added additional scripts, which use a curvature regulariser instead in scripts/curvature.
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
-%This example uses real data. The results can be found in Figure 4. g)h)
-%(proposed method with L^2 regularisation)
+%This example uses real data. The results can be found in Figure 4. (except g)h))
+%(proposed method with TV regularisation)
 %__________________________________________________________________________
 noise=0; %noise level
 loadData = true;

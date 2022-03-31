@@ -113,7 +113,7 @@ for i=1:length(A)
 
 
     %PALM
-    ProxG = @(x,sigma) proximalTV1(x,sigma*lambda*m(1)); %proximal map for second variable
+   % ProxG = @(x,sigma) proximalTV1(x,sigma*lambda*m(1)); %proximal map for second variable
     ProxG = @(x,sigma) x./(1+sigma*lambda);
     maxIter=100;
     tol=10^-3;

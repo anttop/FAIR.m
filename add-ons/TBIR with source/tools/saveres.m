@@ -17,8 +17,8 @@ str = sprintf('%s_params%.2f', name, sigma);
 paramfile = fullfile(outputfolder, sprintf('%s.txt', str));
 
 rec=def+source;
-error=abs(image2-(rec+source));
-error_def=abs(image3-rec);
+error=abs(image2-(rec));
+error_def=abs(image3-def);
 
 % Save result.
 if(scaleimg)
